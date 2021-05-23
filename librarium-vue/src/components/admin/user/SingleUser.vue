@@ -16,9 +16,16 @@
         <el-form-item label="邮箱" label-width="120px" prop="email">
           <el-input v-model="selectedUser.email" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form :model="selectedUser" status-icon :rules="rules" ref="dataForm" label-width="100px">
         <el-form-item label="密码" label-width="120px" prop="password">
+          <el-button type="warning" @click="editpassword(selectedUser.username)">修改密码</el-button>
           <el-button type="warning" @click="resetPassword(selectedUser.username)">重置密码</el-button>
+          <!--<el-input type="password" v-model="selectedUser.password" autocomplete="off"></el-input>-->
         </el-form-item>
+        <!--<el-form-item label="确认密码" label-width="120px" prop="checkPass">
+          <el-input type="password" v-model="selectedUser.checkPass" autocomplete="off"></el-input>
+        </el-form-item>-->
+        </el-form>
         <!--<el-form-item label="角色分配" label-width="120px" prop="roles">
           <el-checkbox-group v-model="selectedRolesIds">
             <el-checkbox v-for="(role,i) in roles" :key="i" :label="role.id">{{role.nameZh}}</el-checkbox>
@@ -108,17 +115,43 @@
     </el-card>
   </div>
 </template>
-
 <script>
   /* eslint-disable */
   import BulkRegistration from './BulkRegistration'
   export default {
     name: 'UserProfile',
     data () {
+      /* var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'))
+        } else {
+          if (this.selectedUser.checkPass !== '') {
+            this.$refs.selectedUser.validateField('checkPass')
+          }
+          callback()
+        }
+      }*/
+      /*var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'))
+        } else if (value !== this.selectedUser.password) {
+          callback(new Error('两次输入密码不一致!'))
+        } else {
+          callback()
+        }
+      }*/
       return {
         users: [],
         dialogFormVisible: false,
-        selectedUser: []
+        selectedUser: [],
+        /* rules: {
+          password: [
+            { message: '请输入密码', trigger: 'blur' }
+          ],
+          checkPass: [
+            { validator: validatePass2, trigger: 'blur' }
+          ]
+        }*/
       }
     },
     mounted () {
@@ -167,7 +200,7 @@
         }
       },
       onSubmit (user) {
-        let _this = this
+        //let _this = this
         // 根据视图绑定的角色 id 向后端传送角色信息
         /*let roles = []
         for (let i = 0; i < _this.selectedRolesIds.length; i++) {
@@ -184,7 +217,7 @@
           email: user.email
           /*roles: roles*/
         }).then(resp => {
-          if (resp && resp.data.code === 200) {
+          if (resp && resp.data.code === 200){
             this.$alert('用户信息修改成功')
             this.dialogFormVisible = false
             // 修改角色后重新请求用户信息，实现视图更新
@@ -200,6 +233,34 @@
           roleIds.push(user.roles[i].id)
         }
         this.selectedRolesIds = roleIds*/
+      },
+      /*editpassword(user) {
+          this.$refs[dataForm].validate((valid) => {
+              if (valid) {
+                  alert('用户信息修改成功')
+                  this.dialogFormVisible = false
+                  // 修改角色后重新请求用户信息，实现视图更新
+                  this.listUser()
+                } else {
+                  this.$alert('修改失败!!')
+                }
+              })
+      },*/
+      editpassword(){
+        this.$prompt('请输入密码', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消'
+        }).then(()=>{
+          this.$message({
+            type: 'success',
+            message: '修改密码成功！'
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '取消输入'
+          });
+        })
       },
       resetPassword (username) {
         this.$axios.put('/user/password', {
