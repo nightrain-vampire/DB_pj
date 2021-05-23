@@ -13,10 +13,15 @@
       <el-input type="text" v-model="loginForm.username"
                 auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
-    <el-form-item prop="password">
-      <el-input type="password" v-model="loginForm.password"
-                auto-complete="off" placeholder="密码"></el-input>
-    </el-form-item>
+    <el-form :model="loginForm" status-icon :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-form-item prop="password">
+        <el-input type="password" v-model="loginForm.password"
+                  auto-complete="off" placeholder="密码"></el-input>
+      </el-form-item>
+      <el-form-item prop="checkPass">
+       <el-input type="password" v-model="loginForm.checkPass" autocomplete="off" placeholder="确认密码"></el-input>
+      </el-form-item>
+    </el-form>
     <el-form-item>
       <el-input type="text" v-model="loginForm.name"
                 auto-complete="off" placeholder="真实姓名"></el-input>
@@ -39,15 +44,36 @@
 <script>
   export default{
     data () {
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'))
+        } else {
+          if (this.loginForm.checkPass !== '') {
+            this.$refs.loginForm.validateField('checkPass')
+          }
+          callback()
+        }
+      }
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'))
+        } else if (value !== this.loginForm.password) {
+          callback(new Error('两次输入密码不一致!'))
+        } else {
+          callback()
+        }
+      }
       return {
         rules: {
           username: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
-          password: [{required: true, message: '密码不能为空', trigger: 'blur'}]
+          password: [{required: true, message: '密码不能为空', validator: validatePass, trigger: 'blur'}],
+          checkPass: [{validator: validatePass2, trigger: 'blur'}]
         },
         checked: true,
         loginForm: {
           username: '',
           password: '',
+          checkPass: '',
           name: '',
           phone: '',
           email: ''
