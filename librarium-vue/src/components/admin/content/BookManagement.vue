@@ -52,6 +52,12 @@
           label="出版社"
           fit>
         </el-table-column>
+        <el-table-column
+          prop="amount"
+          label="数目"
+          fit>
+        </el-table-column>
+
         <!--<el-table-column-->
           <!--prop="abs"-->
           <!--label="摘要"-->
@@ -134,6 +140,7 @@
           date: item.date,
           press: item.press,
           abs: item.abs,
+          amount: item.amount,
           category: {
             id: item.category.id.toString(),
             name: item.category.name
