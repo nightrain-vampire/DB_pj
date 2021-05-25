@@ -28,6 +28,10 @@ public class Returned {
 
     private String time;
 
+    private String duetime;
+
+    private int overdue;
+
 
 
 }

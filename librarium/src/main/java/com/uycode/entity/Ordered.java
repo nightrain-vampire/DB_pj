@@ -28,6 +28,9 @@ public class Ordered {
 
     private String time;
 
+    private String duetime;
+
+    private Integer overdue;
 
 
 }

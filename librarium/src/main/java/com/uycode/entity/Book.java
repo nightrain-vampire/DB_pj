@@ -46,6 +46,10 @@ public class Book {
     private String cover;
 
     /**
+     * The amount of the bool.
+     */
+    private int amount;
+    /**
      * Category id.
      */
     @ManyToOne

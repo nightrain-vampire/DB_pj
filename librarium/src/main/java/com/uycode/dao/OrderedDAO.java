@@ -18,8 +18,7 @@ public interface OrderedDAO extends JpaRepository<Ordered, Integer> {
 
     Ordered findByUidAndBid(Integer uid, Integer bid);
 
-    @Query(value="SELECT new com.uycode.entity.OrderDetail(o.id, u.name, b.title, o.time) FROM Ordered o INNER JOIN User u ON o.uid = u.id INNER JOIN Book" +
-            " b ON o.bid = b.id")
+    @Query(value="SELECT new com.uycode.entity.OrderDetail(o.id, u.name, b.title, o.time, o.duetime,o.overdue) FROM Book b INNER JOIN Ordered o ON o.bid = b.id INNER JOIN User u ON o.uid = u.id " )
     List<OrderDetail> list();
 
 
