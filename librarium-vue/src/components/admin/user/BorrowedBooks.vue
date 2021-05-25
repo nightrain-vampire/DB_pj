@@ -17,7 +17,8 @@
         <p slot="content" style="font-size: 13px;margin-bottom: 6px">
           <span>{{item.author}}</span> /
           <span>{{item.date}}</span> /
-          <span>{{item.press}}</span>
+          <span>{{item.press}}</span> /
+          <span>剩余数量：{{item.amount}}</span>
         </p>
         <p slot="content" style="width: 300px" class="abstract">{{item.abs}}</p>
         <el-card class="card"
@@ -59,7 +60,7 @@
     name: 'BorrowedBooks',
     data () {
       return {
-        disabled: false,
+        // disabled: false,
         values: true,
         books: [],
         currentPage: 1,
@@ -94,8 +95,8 @@
           });
         })
       },
-      changeView (event) {
-        this.disabled = !event
+      changeView (item) {
+        this.disabled = false;
       },
       loadBooks () {
         var _this = this
