@@ -39,10 +39,24 @@
           width="120">
         </el-table-column>
         <el-table-column
+          prop="duetime"
+          label="应还日期"
+          sortable
+          fit>
+        </el-table-column>
+        <el-table-column
           prop="time"
           label="归还日期"
           sortable
           fit>
+        </el-table-column>
+        <el-table-column
+          prop="overdue"
+          label="是否逾期"
+          fit>
+          <template slot-scope="scope">
+            {{scope.row.overdue?'逾期':'未逾期'}}
+          </template>
         </el-table-column>
         <el-table-column>
         <template slot="header" slot-scope="scope">
