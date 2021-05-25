@@ -46,7 +46,8 @@ insert  into `admin_menu`(`id`,`path`,`name`,`name_zh`,`icon_cls`,`component`,`p
 (10,'/admin/content/article','ArticleManagement','文章管理',NULL,'content/ArticleManagement',4),
 (17,'/admin/user/book','bookReturn','归还图书','el-icon-tickets','user/BorrowedBooks',1),
 (18,'/admin/record','Record','借阅记录',NULL,'user/OrderRecord',3),
-(19,'/admin/return','Return','归还记录',NULL,'user/ReturnRecord',3);
+(19,'/admin/return','Return','归还记录',NULL,'user/ReturnRecord',3),
+(20,'/admin/user/commentedtior','CommentEdtior','留言服务',NULL,'user/CommentEdtior',1);
 
 /*Table structure for table `admin_permission` */
 
@@ -347,6 +348,21 @@ insert  into `user`(`id`,`username`,`password`,`salt`,`name`,`phone`,`email`,`en
 (2,'test','ee67f703c63c09207a2aa82feb86e723','laluHHt9MauEDVEI2cSzUQ==','测试用户','15616258066','Hyper-Hack@outlook.com',1),
 (3,'editor','8583a2d965d6159edbf65c82d871fa3e','MZTe7Qwf9QgXBXrZzTIqJQ==','编辑',NULL,NULL,1),
 (25,'visitor','f2aa782914b93d35fd2dd19bdf3a7778','YtRri1YvnlVcLxYQtml7NQ==','ahmatjan','456789','xdcfgvbhjn',1);
+
+/*Table structure for table `comment` */
+DROP TABLE IF EXISTS `comment`;
+
+CREATE TABLE `comment` (
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+    `username` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '用户昵称',
+    `uid` int(11)  COMMENT '用户编号',
+    `comment_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '评论标题',
+    `comment_content_html` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '评论内容（HTML格式）',
+    `comment_content_md` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '评论内容（MD格式）',
+    `time` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT 'null' COMMENT '最新评论时间',
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_comment_on_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

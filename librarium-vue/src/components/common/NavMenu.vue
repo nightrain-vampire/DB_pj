@@ -32,7 +32,8 @@
           /* {name: '/index', navItem: '首页'}, */
           {name: '/jotter', navItem: '笔记本'},
           {name: '/library', navItem: '图书馆'},
-          {name: '/login', navItem: '管理中心'}
+          {name: '/login', navItem: '管理中心'},
+          {name: '/commentBoard', navItem: '留言板'}
         ],
         keywords: '',
         path: ''
