@@ -18,6 +18,9 @@
         <el-form-item label="出版社" :label-width="formLabelWidth" prop="press">
           <el-input v-model="form.press" autocomplete="off"></el-input>
         </el-form-item>
+        <el-form-item label="数目" :label-width="formLabelWidth" prop="amount">
+          <el-input v-model="form.amount" autocomplete="off"></el-input>
+        </el-form-item>
         <el-form-item label="封面" :label-width="formLabelWidth" prop="cover">
           <el-input v-model="form.cover" autocomplete="off" placeholder="图片 URL"></el-input>
           <img-upload @onUpload="uploadImg" ref="imgUpload"></img-upload>
@@ -65,6 +68,7 @@
           cover: '',
           abs: '',
           cid: '',
+          amount: '',
           category: {
             id: '',
             name: ''
@@ -84,6 +88,7 @@
           press: '',
           cover: '',
           abs: '',
+          amount: '',
           category: {
             id: '',
             name: ''
@@ -100,6 +105,7 @@
             date: this.form.date,
             press: this.form.press,
             abs: this.form.abs,
+            amount: this.form.amount,
             category: this.form.category
           }).then(resp => {
             if (resp && resp.data.code === 200) {
