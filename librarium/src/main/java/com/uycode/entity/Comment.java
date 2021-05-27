@@ -2,6 +2,7 @@ package com.uycode.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -20,6 +21,8 @@ public class Comment {
     private String commentTitle;
     private String commentContentHtml;
     private String commentContentMd;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @Column(name = "time")
     private Date commentDate;
 }

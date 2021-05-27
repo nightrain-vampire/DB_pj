@@ -49,6 +49,7 @@ insert  into `admin_menu`(`id`,`path`,`name`,`name_zh`,`icon_cls`,`component`,`p
 (19,'/admin/return','Return','归还记录',NULL,'user/ReturnRecord',3),
 (20,'/admin/user/commentedtior','CommentEdtior','留言服务',NULL,'user/CommentEdtior',1),
 (21,'/admin/content/CommentManagement','CommentManagement','留言管理',NULL,'content/CommentManagement',4);
+/*(22,'/admin/user/singleComment','SingleComment','个人留言',NULL,'user/SingleComment',1);*/
 
 /*Table structure for table `admin_permission` */
 

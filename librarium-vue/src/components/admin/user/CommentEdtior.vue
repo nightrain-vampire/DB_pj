@@ -10,6 +10,19 @@
     </el-header>
     <el-main>
       <el-row>
+        <el-date-picker
+          v-model="comment.commentDate"
+          style="width: 1075px;position: page;margin: 10px 0px;font-size: 18px;"
+          type="datetime"
+          placeholder="请输入日期"
+          editable="false"
+          :default-value="new Date()"
+          align="right"
+          value-format="yyyy-MM-dd HH:mm:ss"
+          :picker-options="pickerOptions">
+        </el-date-picker>
+      </el-row>
+      <el-row>
         <el-input
           v-model="comment.commentTitle"
           style="margin: 10px 0px;font-size: 18px;"
@@ -47,8 +60,30 @@ export default {
   name: 'CommentEdtior',
   data () {
     return {
-      comment: {},
-      dialogVisible: false
+      comment: [],
+      dialogVisible: false,
+      pickerOptions: {
+        shortcuts: [{
+          text: '今天',
+          onClick(picker) {
+            picker.$emit('pick', new Date());
+          }
+        }, {
+          text: '昨天',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24);
+            picker.$emit('pick', date);
+          }
+        }, {
+          text: '一周前',
+          onClick(picker) {
+            const date = new Date();
+            date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+            picker.$emit('pick', date);
+          }
+        }]
+      }
     }
   },
   mounted () {

@@ -2,16 +2,27 @@
   <div style="margin-top: 40px">
     <!--<el-button @click="addComment">添加评论</el-button>-->
     <div class="comments-area">
-      <el-card style="text-align: left">
-        <div v-for="comment in comments" :key="comment.id">
-          <div style="float:left;width:85%;height: 150px;">
-            <router-link class="comment-link" :to="{path:'commentBoard/comment',query:{id: comment.id}}"><span style="font-size: 20px"><strong>{{comment.commentTitle}}</strong></span></router-link>
-            <el-divider content-position="left">{{comment.commentDate}}</el-divider>
-            <router-link class="article-link" :to="{path:'commentBoard/comment',query:{id: comment.id}}"></router-link>
-          </div>
-          <el-divider></el-divider>
-        </div>
-      </el-card>
+      <el-timeline>
+        <template v-for="comment in comments">
+          <el-timeline-item
+            :key="comment.id"
+            placement="top"
+            size="large"
+            color="#6699FF">
+            <el-card style="text-align: left">
+              <div>
+                <div style="float:left;width:85%;height: 150px;">
+                  <router-link class="comment-link" :to="{path:'commentBoard/comment',query:{id: comment.id}}"><span style="font-size: 20px"><strong>{{comment.commentTitle}}</strong></span></router-link>
+                  <!--<el-divider content-position="left">{{comment.commentDate}}</el-divider>-->
+                  <el-divider></el-divider>
+                  <span style="font-size: 20px"><strong>{{comment.username}}</strong></span>
+                  <!--<router-link class="article-link" :to="{path:'commentBoard/comment',query:{id: comment.id}}"></router-link>-->
+                </div>
+              </div>
+            </el-card>
+          </el-timeline-item>
+        </template>
+      </el-timeline>
     </div>
     <el-pagination
       background
