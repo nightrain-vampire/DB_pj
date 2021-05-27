@@ -47,7 +47,8 @@ insert  into `admin_menu`(`id`,`path`,`name`,`name_zh`,`icon_cls`,`component`,`p
 (17,'/admin/user/book','bookReturn','归还图书','el-icon-tickets','user/BorrowedBooks',1),
 (18,'/admin/record','Record','借阅记录',NULL,'user/OrderRecord',3),
 (19,'/admin/return','Return','归还记录',NULL,'user/ReturnRecord',3),
-(20,'/admin/user/commentedtior','CommentEdtior','留言服务',NULL,'user/CommentEdtior',1);
+(20,'/admin/user/commentedtior','CommentEdtior','留言服务',NULL,'user/CommentEdtior',1),
+(21,'/admin/content/CommentManagement','CommentManagement','留言管理',NULL,'content/CommentManagement',4);
 
 /*Table structure for table `admin_permission` */
 
@@ -130,7 +131,11 @@ insert  into `admin_role_menu`(`id`,`rid`,`mid`) values
 (113,3,1),
 (114,3,2),
 (115,3,5),
-(116,3,17);
+(116,3,17),
+(117,9,20),
+(118,1,20),
+(119,2,20),
+(120,3,20);
 
 /*Table structure for table `admin_role_permission` */
 
@@ -359,7 +364,7 @@ CREATE TABLE `comment` (
     `comment_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '评论标题',
     `comment_content_html` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '评论内容（HTML格式）',
     `comment_content_md` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '评论内容（MD格式）',
-    `time` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT 'null' COMMENT '最新评论时间',
+    `time` datetime DEFAULT NULL COMMENT '评论时间',
     PRIMARY KEY (`id`),
     CONSTRAINT `fk_comment_on_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

@@ -11,7 +11,7 @@
       <el-menu-item class="text_eff" v-for="(item,i) in navList" :key="i" :index="item.name">
         {{ item.navItem }}
       </el-menu-item>
-      <span style="position: absolute;padding-top: 20px;right: 43%;font-size: 20px;font-weight: bold">BMS - 图书借阅与归还移动终端服务系统</span>
+      <span style="position: absolute;padding-top: 20px;right: 43%;font-size: 20px;font-weight: bold">图书馆管理系统</span>
       <el-input
         placeholder="快速搜索..."
         prefix-icon="el-icon-search"

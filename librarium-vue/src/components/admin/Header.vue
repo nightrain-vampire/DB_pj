@@ -6,7 +6,7 @@
     <span style="font-size: 32px;font-weight: bold;position:absolute;left: 100px">后台管理</span>
     <el-tooltip class="item" effect="dark" content="点击退出" placement="bottom-start">
       <el-badge is-dot class="item">
-        <i class="el-icon-user-solid" @click="logout" style="font-size: 40px;float: right"></i>
+        <i class="el-icon-switch-button" @click="logout" style="font-size: 40px;float: right"></i>
       </el-badge>
     </el-tooltip>
     <el-breadcrumb class="text_eff"  separator="          ">

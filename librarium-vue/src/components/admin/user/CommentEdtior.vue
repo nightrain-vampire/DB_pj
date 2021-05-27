@@ -1,59 +1,53 @@
 <template>
-  <div>
-    <el-row style="margin: 18px 0px 0px 18px ">
-      <el-breadcrumb separator-class="el-icon-arrow-right">
-        <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
-        <el-breadcrumb-item>留言服务</el-breadcrumb-item>
-      </el-breadcrumb>
-    </el-row>
-    <el-row>
-      <el-input
-        v-model="comment.commentTitle"
-        style="margin: 10px 0px;font-size: 18px;"
-        placeholder="请输入标题"></el-input>
-    </el-row>
-    <el-row>
-      <el-input
-        v-model="comment.username"
-        style="margin: 10px 0px;font-size: 18px;"
-        placeholder="请输入昵称(选填)"></el-input>
-    </el-row>
-    <el-row style="height: calc(100vh - 140px);">
-      <mavon-editor
-        v-model="comment.commentContentMd"
-        style="height: 100%;"
-        ref=md
-        @save="saveComments"
-        fontSize="16px">
-      </mavon-editor>
-      <el-dialog
-        :visible.sync="dialogVisible"
-        width="30%">
+  <el-container>
+    <el-header>
+      <el-row style="margin: 18px 0px 0px 18px ">
+        <el-breadcrumb separator-class="el-icon-arrow-right">
+          <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
+          <el-breadcrumb-item>留言服务</el-breadcrumb-item>
+        </el-breadcrumb>
+      </el-row>
+    </el-header>
+    <el-main>
+      <el-row>
+        <el-input
+          v-model="comment.commentTitle"
+          style="margin: 10px 0px;font-size: 18px;"
+          placeholder="请输入标题"></el-input>
+      </el-row>
+      <el-row>
+        <el-input
+          v-model="comment.username"
+          style="margin: 10px 0px;font-size: 18px;"
+          placeholder="请输入昵称(选填)"></el-input>
+      </el-row>
+      <el-row style="height: calc(100vh - 140px);">
+        <mavon-editor
+          v-model="comment.commentContentMd"
+          style="height: 100%;"
+          ref=md
+          @save="saveComments"
+          fontSize="16px">
+        </mavon-editor>
+        <el-dialog
+          :visible.sync="dialogVisible"
+          width="30%">
         <span slot="footer" class="dialog-footer">
           <el-button @click="dialogVisible = false">取 消</el-button>
           <el-button type="primary" @click="dialogVisible = false">确 定</el-button>
         </span>
-      </el-dialog>
-    </el-row>
-  </div>
+        </el-dialog>
+      </el-row>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
-//import ImgUpload from '../content/ImgUpload'
 export default {
   name: 'CommentEdtior',
-  //components: {ImgUpload},
   data () {
     return {
-      comment: {
-        uid: this.$store.state.id,
-        gmtCreate: '',
-        id: '',
-        commentTitle: '',
-        commentContentMd: '',
-        commentContentHtml: '',
-        username: '',
-      },
+      comment: {},
       dialogVisible: false
     }
   },
@@ -70,21 +64,23 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-          const commentTime = new Date();
-          const year = commentTime.getFullYear();
-          const month = commentTime.getMonth()+1;
-          const day = commentTime.getDate();
-          const hour = commentTime.getHours();
-          const minute = commentTime.getMinutes();
-          const seconds = commentTime.getSeconds();
-          this.comment.gmtCreate = `${year}年${month}月${day}日  ${hour}:${minute}:${seconds}`
+          //const commentTime = new Date();
+          //const year = commentTime.getFullYear();
+          //const month = commentTime.getMonth()+1;
+          //const day = commentTime.getDate();
+          //const hour = commentTime.getHours();
+          //const minute = commentTime.getMinutes();
+          //const seconds = commentTime.getSeconds();
+          //this.comment.commentDate = `${year}年${month}月${day}日  ${hour}:${minute}:${seconds}`
           this.$axios
-            .post('/admin/content/comment', {
+            .post('/admin/comment', {
+              uid: this.$store.state.id,
               id: this.comment.id,
               commentTitle: this.comment.commentTitle,
               commentContentMd: value,
               commentContentHtml: render,
               username: this.comment.username,
+              commentDate: this.comment.commentDate
             }).then(resp => {
             if (resp && resp.data.code === 200) {
               this.$message({

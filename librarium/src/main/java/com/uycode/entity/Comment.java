@@ -21,5 +21,5 @@ public class Comment {
     private String commentContentHtml;
     private String commentContentMd;
     @Column(name = "time")
-    private Date gmtCreate;
+    private Date commentDate;
 }

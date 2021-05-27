@@ -42,7 +42,7 @@ export default {
       var _this = this
       this.$axios.get('/comment/' + this.$route.query.id).then(resp => {
         if (resp && resp.data.code === 200) {
-          _this.article = resp.data.result
+          _this.comment = resp.data.result
         }
       })
     }

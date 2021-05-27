@@ -12,7 +12,7 @@ public class CommentController {
     @Autowired
     CommentService commentService;
 
-    @PostMapping("api/admin/content/comment")
+    @PostMapping("api/admin/comment")
     public Result saveComment(@RequestBody Comment comment) {
         if(commentService.addOrUpdate(comment)) {
             return ResultFactory.buildSuccessResult("发布成功");

@@ -4,15 +4,12 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard' }">管理中心</el-breadcrumb-item>
         <el-breadcrumb-item>内容管理</el-breadcrumb-item>
-        <el-breadcrumb-item>文章管理</el-breadcrumb-item>
+        <el-breadcrumb-item>留言管理</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
-    <el-link href="/admin/content/editor" :underline="false" target="_blank" class="add-link">
-      <el-button type="success" class="el-icon-plus">写文章</el-button>
-    </el-link>
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
-        :data="articles"
+        :data="comments"
         stripe
         style="width: 100%"
         :max-height="tableHeight">
@@ -20,22 +17,18 @@
           type="selection"
           width="45">
         </el-table-column>
-        <el-table-column type="expand">
-          <template slot-scope="props">
-            <el-form label-position="left" inline>
-              <el-form-item>
-                <span>{{ props.row.articleAbstract }}</span>
-              </el-form-item>
-            </el-form>
-          </template>
-        </el-table-column>
         <el-table-column
-          prop="articleTitle"
-          label="题目（展开查看摘要）"
+          prop="commentTitle"
+          label="题目"
           width="300">
         </el-table-column>
         <el-table-column
-          prop="articleDate"
+          prop="username"
+          label="留言者昵称"
+          width="200">
+        </el-table-column>
+        <el-table-column
+          prop="commentDate"
           label="发布日期"
           width="200">
         </el-table-column>
@@ -45,19 +38,13 @@
           width="280">
           <template slot-scope="scope">
             <el-button
-              @click.native.prevent="viewArticle(scope.row.id)"
+              @click.native.prevent="viewcomment(scope.row.id)"
               type="success"
               size="mini" class="el-icon-search">
               查看
             </el-button>
             <el-button
-              @click.native.prevent="editArticle(scope.row)"
-              type="primary"
-              size="mini" class="el-icon-edit">
-              编辑
-            </el-button>
-            <el-button
-              @click.native.prevent="deleteArticle(scope.row.id)"
+              @click.native.prevent="deletecomment(scope.row.id)"
               type="danger"
               size="mini" class="el-icon-document-delete">
               移除
@@ -81,16 +68,16 @@
 
 <script>
   export default {
-    name: 'ArticleManagement',
+    name: 'CommentManagement',
     data () {
       return {
-        articles: [],
+        comments: [],
         pageSize: 10,
         total: 0
       }
     },
     mounted () {
-      this.loadArticles()
+      this.loadcomments()
     },
     computed: {
       tableHeight () {
@@ -98,55 +85,45 @@
       }
     },
     methods: {
-      loadArticles () {
+      loadcomments () {
         var _this = this
-        this.$axios.get('/article/' + this.pageSize + '/1').then(resp => {
+        this.$axios.get('/comment/' + this.pageSize + '/1').then(resp => {
           if (resp && resp.data.code === 200) {
-            _this.articles = resp.data.result.content
+            _this.comments = resp.data.result.content
             _this.total = resp.data.result.totalElements
           }
         })
       },
       handleCurrentChange (page) {
         var _this = this
-        this.$axios.get('/article/' + this.pageSize + '/' + page).then(resp => {
+        this.$axios.get('/comment/' + this.pageSize + '/' + page).then(resp => {
           if (resp && resp.data.code === 200) {
-            _this.articles = resp.data.result.content
+            _this.comments = resp.data.result.content
             _this.total = resp.data.result.totalElements
           }
         })
       },
-      viewArticle (id) {
-        let articleUrl = this.$router.resolve(
+      viewcomment (id) {
+        let commentUrl = this.$router.resolve(
           {
-            path: '../../jotter/article',
+            path: '../../commentBoard/comment',
             query: {
               id: id
             }
           }
         )
-        window.open(articleUrl.href, '_blank')
+        window.open(commentUrl.href, '_blank')
       },
-      editArticle (article) {
-        this.$router.push(
-          {
-            name: 'Editor',
-            params: {
-              article: article
-            }
-          }
-        )
-      },
-      deleteArticle (id) {
-        this.$confirm('此操作将永久删除该文章, 是否继续?', '提示', {
+      deletecomment (id) {
+        this.$confirm('此操作将永久删除该评论, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
             this.$axios
-              .delete('/admin/content/article/' + id).then(resp => {
+              .delete('/admin/content/comment/' + id).then(resp => {
               if (resp && resp.data.code === 200) {
-                this.loadArticles()
+                this.loadcomments()
               }
             })
           }
