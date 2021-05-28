@@ -25,6 +25,12 @@
                  :body-style="{padding: '10px'}"
                  shadow="hover">
           <div class="cover">
+            <el-button type="primary"
+                       @click="star(item)"
+                       :key="item.id"
+                       icon="el-icon-star-off" circle
+                       size="small">
+            </el-button>
             <img :src="item.cover" alt="封面">
           </div>
           <div class="info">
@@ -71,6 +77,11 @@
           uid: this.$store.state.id,
           bid: 0,
           time:''
+        },
+        starred: {
+          uid: this.$store.state.id,
+          bid: 0,
+          time: ''
         }
       }
     },
@@ -136,6 +147,49 @@
           })
         }
       },
+      star (item) {
+        if (this.$store.state.id === '') {
+          console.log("未登录，不能收藏！");
+          this.$router.push('/login')
+        }
+        else{
+          const title = item.title;
+          this.starred.bid = item.id
+          const starTime = new Date();
+          const year = starTime.getFullYear();
+          const month = starTime.getMonth()+1;
+          const day = starTime.getDate();
+          const hour = starTime.getHours();
+          const minute = starTime.getMinutes();
+          const seconds = starTime.getSeconds();
+          this.starred.time = `${year}年${month}月${day}日  ${hour}:${minute}:${seconds}`
+          const _this = this
+          this.$axios.post('/star',this.starred).then( resp =>{
+            if(resp && resp.data.code === 200) {
+              this.$notify.success({
+                title:"成功！",
+                message: `你成功收藏《${title}》！`
+              })
+
+            }
+            else if(resp.data.code ===400) {
+              var indexs = this.books.findIndex(item =>{
+                if(item.id === this.starred.bid){
+                  return true
+                }
+              })
+              this.books.splice(indexs,1)
+              this.$notify({
+                title: '错误！',
+                message: `你已经收藏《${title}》！`,
+                type: 'error'
+              })
+            }
+          }).catch( error =>{
+            console.log(error)
+          })
+        }
+      },
       changeView (event) {
         this.disabled = !event
       },
@@ -167,9 +221,12 @@
   .card{
     width: 200px;
     margin-bottom: 20px;
-    height: 350px;
+    height: 360px;
     float: left;
-    margin-right: 15px
+    margin-right: 15px;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 0 25px #cac6c6;
+    background-color: #E6E6FA;
   }
 
   .cover {
@@ -192,7 +249,7 @@
   }
 
   .author {
-    color: #333;
+    color: #1b1f23;
     width: 102px;
     font-size: 11px;
     margin-bottom: 8px;
@@ -221,7 +278,7 @@
   }
 
   a:link, a:visited, a:focus {
-    color: #3377aa;
+    color: #6f42c1;
   }
 
 </style>
