@@ -1,0 +1,226 @@
+Folder PATH listing for volume UserAndProgram
+Volume serial number is 00000143 7CB7:4B09
+D:\GITHUB\WHITE-JOTTER\LIBRARIUM-VUE
+│  .babelrc
+│  .editorconfig
+│  .eslintignore
+│  .eslintrc.js
+│  .gitignore
+│  .postcssrc.js
+│  index.html
+│  librarium-vue.iml
+│  package-lock.json
+│  package.json
+│  README.md
+│  
+├─build
+│      build.js
+│      check-versions.js
+│      logo.png
+│      utils.js
+│      vue-loader.conf.js
+│      webpack.base.conf.js
+│      webpack.dev.conf.js
+│      webpack.prod.conf.js
+│      
+├─config
+│      dev.env.js
+│      index.js
+│      prod.env.js
+│      test.env.js
+│      
+├─dist
+│  │  index.html
+│  │  
+│  └─static
+│      ├─css
+│      │      app.171400a5504f598a69452fe10dad3f3e.css
+│      │      app.171400a5504f598a69452fe10dad3f3e.css.gz
+│      │      app.171400a5504f598a69452fe10dad3f3e.css.map
+│      │      
+│      ├─fonts
+│      │      element-icons.535877f.woff
+│      │      element-icons.732389d.ttf
+│      │      fontello.068ca2b.ttf
+│      │      fontello.e73a064.eot
+│      │      
+│      ├─img
+│      │  │  404.2348c28.png
+│      │  │  bg2.5804e93.jpg
+│      │  │  csdn.a6433a3.png
+│      │  │  eva1.5804e93.jpg
+│      │  │  fontello.9354499.svg
+│      │  │  icon2.7af423d.png
+│      │  │  icon5.80c67f4.png
+│      │  │  icon6.ccc4e0c.png
+│      │  │  logo.b9d9bf1.png
+│      │  │  
+│      │  └─carousel
+│      │          element.png
+│      │          how2j.png
+│      │          vue.png
+│      │          
+│      └─js
+│              0.57d32707c87a5e983ef4.js
+│              0.57d32707c87a5e983ef4.js.gz
+│              0.57d32707c87a5e983ef4.js.map
+│              app.a295226f5a82267c18ea.js
+│              app.a295226f5a82267c18ea.js.gz
+│              app.a295226f5a82267c18ea.js.map
+│              manifest.3b8f399931b69e4e6ed6.js
+│              manifest.3b8f399931b69e4e6ed6.js.map
+│              vendor.47374c56f287d6556978.js
+│              vendor.47374c56f287d6556978.js.gz
+│              vendor.47374c56f287d6556978.js.map
+│              
+├─node_modules
+│  ├─.bin      
+│  └─大量其他文件
+│                  
+├─src
+│  │  App.vue
+│  │  main.js
+│  │  
+│  ├─assets
+│  │  │  logo.png
+│  │  │  
+│  │  └─img
+│  │      ├─bg
+│  │      │      bg2.jpg
+│  │      │      eva1.jpg
+│  │      │      topo.png
+│  │      │      
+│  │      ├─books
+│  │      │      s2768378.jpg
+│  │      │      s29958602.jpg
+│  │      │      
+│  │      └─icon
+│  │              404.png
+│  │              csdn.png
+│  │              favicon.png
+│  │              icon1.png
+│  │              icon2.png
+│  │              icon5.png
+│  │              icon6.png
+│  │              icon7.png
+│  │              logo.ico
+│  │              logo.png
+│  │              
+│  ├─components
+│  │  │  Home.vue
+│  │  │  Login.vue
+│  │  │  Register.vue
+│  │  │  
+│  │  ├─admin
+│  │  │  │  AdminIndex.vue
+│  │  │  │  AdminMenu.vue
+│  │  │  │  Header.vue
+│  │  │  │  
+│  │  │  ├─content
+│  │  │  │      ArticleEditor.vue
+│  │  │  │      ArticleManagement.vue
+│  │  │  │      BannerManagement.vue
+│  │  │  │      BookManagement.vue
+│  │  │  │      EditForm.vue
+│  │  │  │      ImgUpload.vue
+│  │  │  │      
+│  │  │  ├─dashboard
+│  │  │  │  └─admin
+│  │  │  │      │  index.vue
+│  │  │  │      │  
+│  │  │  │      └─components
+│  │  │  │          │  BarChart.vue
+│  │  │  │          │  BoxCard.vue
+│  │  │  │          │  LineChart.vue
+│  │  │  │          │  PanelGroup.vue
+│  │  │  │          │  PieChart.vue
+│  │  │  │          │  RaddarChart.vue
+│  │  │  │          │  TransactionTable.vue
+│  │  │  │          │  
+│  │  │  │          ├─mixins
+│  │  │  │          │      resize.js
+│  │  │  │          │      
+│  │  │  │          └─TodoList
+│  │  │  │                  index.scss
+│  │  │  │                  index.vue
+│  │  │  │                  Todo.vue
+│  │  │  │                  
+│  │  │  └─user
+│  │  │          BorrowedBooks.vue
+│  │  │          BulkRegistration.vue
+│  │  │          Role.vue
+│  │  │          RoleCreate.vue
+│  │  │          SingleUser.vue
+│  │  │          UserProfile.vue
+│  │  │          
+│  │  ├─common
+│  │  │      About.vue
+│  │  │      NavMenu.vue
+│  │  │      
+│  │  ├─home
+│  │  │      AppIndex.vue
+│  │  │      Carousel.vue
+│  │  │      QuickNav.vue
+│  │  │      SideMenu.vue
+│  │  │      Slogan.vue
+│  │  │      UpdateCard.vue
+│  │  │      
+│  │  ├─jotter
+│  │  │      ArticleDetails.vue
+│  │  │      Articles.vue
+│  │  │      JotterNav.vue
+│  │  │      Module.vue
+│  │  │      
+│  │  ├─library
+│  │  │      Books.vue
+│  │  │      LibraryIndex.vue
+│  │  │      SearchBar.vue
+│  │  │      SideMenu.vue
+│  │  │      Tag.vue
+│  │  │      ViewSwitch.vue
+│  │  │      
+│  │  └─pages
+│  │          Error404.vue
+│  │          
+│  ├─router
+│  │      index.js
+│  │      
+│  ├─store
+│  │      index.js
+│  │      
+│  ├─styles
+│  │      markdown.css
+│  │      sidebar.scss
+│  │      
+│  └─utils
+│          index.js
+│          validate.js
+│          
+├─static
+│  │  .gitkeep
+│  │  
+│  └─img
+│      └─carousel
+│              element.png
+│              how2j.png
+│              vue.png
+│              
+└─test
+    ├─e2e
+    │  │  nightwatch.conf.js
+    │  │  runner.js
+    │  │  
+    │  ├─custom-assertions
+    │  │      elementCount.js
+    │  │      
+    │  └─specs
+    │          test.js
+    │          
+    └─unit
+        │  .eslintrc
+        │  jest.conf.js
+        │  setup.js
+        │  
+        └─specs
+                HelloWorld.spec.js
+                
