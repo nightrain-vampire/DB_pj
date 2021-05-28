@@ -4,9 +4,22 @@
       <el-breadcrumb separator-class="el-icon-arrow-right">
         <el-breadcrumb-item :to="{ path: '/admin/dashboard'}">管理中心</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/admin/content/book'}">内容管理</el-breadcrumb-item>
-        <el-breadcrumb-item :to="{ path: '/admin/content/article'}">文章管理</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/admin/content/article'}">公告管理</el-breadcrumb-item>
         <el-breadcrumb-item>编辑器</el-breadcrumb-item>
       </el-breadcrumb>
+    </el-row>
+    <el-row>
+      <el-date-picker
+        v-model="article.articleDate"
+        style="width: 1420px;position: page;margin: 10px 0px;font-size: 18px;"
+        type="datetime"
+        placeholder="请选择日期"
+        editable="false"
+        :default-value="new Date()"
+        align="right"
+        value-format="yyyy-MM-dd HH:mm:ss"
+        :picker-options="pickerOptions">
+      </el-date-picker>
     </el-row>
     <el-row>
       <el-input
@@ -57,7 +70,29 @@
     data () {
       return {
         article: {},
-        dialogVisible: false
+        dialogVisible: false,
+        pickerOptions: {
+          shortcuts: [{
+            text: '今天',
+            onClick (picker) {
+              picker.$emit('pick', new Date())
+            }
+          }, {
+            text: '昨天',
+            onClick (picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24)
+              picker.$emit('pick', date)
+            }
+          }, {
+            text: '一周前',
+            onClick (picker) {
+              const date = new Date()
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7)
+              picker.$emit('pick', date)
+            }
+          }]
+        }
       }
     },
     mounted () {
@@ -68,7 +103,7 @@
     methods: {
       saveArticles (value, render) {
         // value 是 md，render 是 html
-        this.$confirm('是否保存并发布文章?', '提示', {
+        this.$confirm('是否保存并发布公告?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'

@@ -25,6 +25,12 @@
                  :body-style="{padding: '10px'}"
                  shadow="hover">
           <div class="cover">
+            <el-button type="primary"
+                       @click="star(item)"
+                       :key="item.id"
+                       icon="el-icon-star-off" circle
+                       size="small">
+            </el-button>
             <img :src="item.cover" alt="封面">
           </div>
           <div class="info">
@@ -33,11 +39,12 @@
             </div>
           </div>
           <div class="author">{{item.author}}</div>
-          <el-button type="warning"
-                     @click="borrow(item)"
-                     :key="item.id"
-                     style="float: bottom; width: 180px">
-              <i class="el-icon-collection"></i>    借  阅
+          <el-button
+            type="warning"
+            @click="borrow(item)"
+            :key="item.id"
+            style="float: bottom; width: 180px">
+            <i class="el-icon-collection"></i>    借  阅
           </el-button>
         </el-card>
       </el-tooltip>
@@ -70,7 +77,13 @@
         borrowed: {
           uid: this.$store.state.id,
           bid: 0,
-          time:''
+          time:'',
+          duetime:''
+        },
+        starred: {
+          uid: this.$store.state.id,
+          bid: 0,
+          time: ''
         }
       }
     },
@@ -97,37 +110,89 @@
         if (this.$store.state.id === '') {
           console.log("未登录，不能借阅！");
           this.$router.push('/login')
-        }
-        else{
+        } else {
           const title = item.title;
-          this.borrowed.bid = item.id
+          this.borrowed.bid = item.id;
           const borrowTime = new Date();
           const year = borrowTime.getFullYear();
-          const month = borrowTime.getMonth()+1;
+          const month = borrowTime.getMonth() + 1;
           const day = borrowTime.getDate();
           const hour = borrowTime.getHours();
           const minute = borrowTime.getMinutes();
           const seconds = borrowTime.getSeconds();
-          this.borrowed.time = `${year}年${month}月${day}日  ${hour}:${minute}:${seconds}`
-          const _this = this
-          this.$axios.post('/borrow',this.borrowed).then( resp =>{
-            if(resp && resp.data.code === 200) {
+          this.borrowed.time = `${year}年${month}月${day}日  ${hour}:${minute}:${seconds}`;
+          let dday = day;
+          if (month - 9 === 2 && dday > 28) {
+            if ((year % 4 === 0 && year % 100) || year % 400 === 0)
+              dday = 29;
+            else
+              dday = 28;
+          } else if (dday === 30 && ((month + 3) % 12 === 1 || (month + 3) % 12 === 3 || (month + 3) % 12 === 5 ||
+            (month + 3) % 12 === 7 || (month + 3) % 12 === 8 || (month + 3) % 12 === 10 || (month + 3) % 12 === 12))
+            dday = 31;
+          else if (dday === 31 && ((month + 3) % 12 === 4 || (month + 3) % 12 === 6 || (month + 3) % 12 === 9 ||
+            (month + 3) % 12 === 11))
+            dday = 30;
+          this.borrowed.duetime = `${month+3>12?year+1:year}年${month+3>12?month-9:month+3}月${dday}日  ${hour}:${minute}:${seconds}`;
+          this.$axios.post('/borrow', this.borrowed).then(resp => {
+            if (resp && resp.data.code === 200) {
               this.$notify.success({
-                title:"成功！",
+                title: "成功！",
                 message: `你成功借阅《${title}》！`
               })
 
+            } else if (resp.data.code === 400) {
+              /*var indexs = */this.books.findIndex(item => {
+                if (item.id === this.borrowed.bid) {
+                  return true
+                }
+              })
+              //this.books.splice(indexs, 1)  //点击后已借阅的图书会消失
+              this.$notify({
+                title: '错误！',
+                message: `你已经借阅《${title}》！`,
+                type: 'error'
+              })
+            }
+          }).catch(error => {
+            console.log(error)
+          })
+        }
+      },
+      star (item) {
+        if (this.$store.state.id === '') {
+          console.log("未登录，不能收藏！");
+          this.$router.push('/login')
+        }
+        else{
+          const title = item.title;
+          this.starred.bid = item.id
+          const starTime = new Date();
+          const year = starTime.getFullYear();
+          const month = starTime.getMonth()+1;
+          const day = starTime.getDate();
+          const hour = starTime.getHours();
+          const minute = starTime.getMinutes();
+          const seconds = starTime.getSeconds();
+          this.starred.time = `${year}年${month}月${day}日  ${hour}:${minute}:${seconds}`
+          const _this = this
+          this.$axios.post('/star',this.starred).then( resp =>{
+            if(resp && resp.data.code === 200) {
+              this.$notify.success({
+                title:"成功！",
+                message: `你成功收藏《${title}》！`
+              })
             }
             else if(resp.data.code ===400) {
               var indexs = this.books.findIndex(item =>{
-                if(item.id === this.borrowed.bid){
+                if(item.id === this.starred.bid){
                   return true
                 }
               })
               this.books.splice(indexs,1)
               this.$notify({
                 title: '错误！',
-                message: `你已经借阅《${title}》！`,
+                message: `你已经收藏《${title}》！`,
                 type: 'error'
               })
             }
@@ -167,9 +232,12 @@
   .card{
     width: 200px;
     margin-bottom: 20px;
-    height: 350px;
+    height: 400px;
     float: left;
-    margin-right: 15px
+    margin-right: 15px;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 0 25px #cac6c6;
+    background-color: #E6E6FA;
   }
 
   .cover {
@@ -192,7 +260,7 @@
   }
 
   .author {
-    color: #333;
+    color: #1b1f23;
     width: 102px;
     font-size: 11px;
     margin-bottom: 8px;
@@ -221,7 +289,7 @@
   }
 
   a:link, a:visited, a:focus {
-    color: #3377aa;
+    color: #6f42c1;
   }
 
 </style>

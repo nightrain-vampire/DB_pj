@@ -12,6 +12,8 @@ import Register from '../components/Register'
 import DashBoard from '../components/admin/dashboard/admin/index'
 import ArticleDetails from '../components/jotter/ArticleDetails'
 import Error404 from '../components/pages/Error404'
+import Comment from '../components/commentBoard/Comment'
+import CommentDetails from '../components/commentBoard/CommentDetails'
 
 Vue.use(Router)
 
@@ -38,6 +40,11 @@ export default new Router({
       }
     },
     {
+      path: '/commentBoard/comment',
+      name: 'Comment',
+      component: CommentDetails
+    },
+    {
       // home页面并不需要被访问，只是作为其它组件的父组件
       path: '/home',
       name: 'Home',
@@ -58,6 +65,11 @@ export default new Router({
           path: '/library',
           name: 'Library',
           component: LibraryIndex
+        },
+        {
+          path: '/commentBoard',
+          name: 'CommentBoard',
+          component: Comment,
         }
       ]
     },
@@ -130,6 +142,11 @@ export const createRouter = routes => new Router({
       }
     },
     {
+      path: '/commentBoard/comment',
+      name: 'Comment',
+      component: CommentDetails
+    },
+    {
       // home页面并不需要被访问，只是作为其它组件的父组件
       path: '/home',
       name: 'Home',
@@ -150,6 +167,11 @@ export const createRouter = routes => new Router({
           path: '/library',
           name: 'Library',
           component: LibraryIndex
+        },
+        {
+          path: '/commentBoard',
+          name: 'CommentBoard',
+          component: Comment
         }
       ]
     },

@@ -62,7 +62,7 @@ import {
   Notification,
   Select,
   Option,
-  Backtop
+  Backtop, DatePicker
 } from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
@@ -118,6 +118,7 @@ Vue.use(Divider)
 Vue.use(Image)
 Vue.use(Select)
 Vue.use(Option)
+Vue.use(DatePicker)
 
 Vue.use(Loading.directive)
 

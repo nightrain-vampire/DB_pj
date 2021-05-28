@@ -16,22 +16,10 @@
         <el-form-item label="邮箱" label-width="120px" prop="email">
           <el-input v-model="selectedUser.email" autocomplete="off"></el-input>
         </el-form-item>
-        <el-form :model="selectedUser" status-icon :rules="rules" ref="dataForm" label-width="100px">
         <el-form-item label="密码" label-width="120px" prop="password">
-          <el-button type="warning" @click="editpassword(selectedUser.username)">修改密码</el-button>
           <el-button type="warning" @click="resetPassword(selectedUser.username)">重置密码</el-button>
-          <!--<el-input type="password" v-model="selectedUser.password" autocomplete="off"></el-input>-->
         </el-form-item>
-        <!--<el-form-item label="确认密码" label-width="120px" prop="checkPass">
-          <el-input type="password" v-model="selectedUser.checkPass" autocomplete="off"></el-input>
-        </el-form-item>-->
         </el-form>
-        <!--<el-form-item label="角色分配" label-width="120px" prop="roles">
-          <el-checkbox-group v-model="selectedRolesIds">
-            <el-checkbox v-for="(role,i) in roles" :key="i" :label="role.id">{{role.nameZh}}</el-checkbox>
-          </el-checkbox-group>
-        </el-form-item>-->
-      </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
         <el-button type="primary" @click="onSubmit(selectedUser)">确 定</el-button>
@@ -43,7 +31,6 @@
         <el-breadcrumb-item>个人信息</el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>
-    <!--<bulk-registration @onSubmit="listUsers()"></bulk-registration>-->
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
         :data="users"
@@ -77,41 +64,19 @@
           show-overflow-tooltip
           width="200">
         </el-table-column>
-        <!--<el-table-column
-          label="状态"
-          width="100">
-          <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.enabled"
-              active-color="#13ce66"
-              inactive-color="#ff4949"
-              @change="(value) => commitStatusChange(value, scope.row)">
-            </el-switch>
-          </template>
-        </el-table-column>-->
         <el-table-column
-          fixed="right"
           label="操作"
           width="100">
           <template slot-scope="scope">
-            <el-button
-              @click="editUser(scope.row)"
-              type="primary"
-              size="mini" class="el-icon-edit">
-              编辑
-            </el-button>
-            <!--<el-button
-              type="danger"
-              size="mini" class="el-icon-delete">
-              移除
-            </el-button>-->
+              <el-button
+                @click="editUser(scope.row)"
+                type="primary"
+                size="mini" icon="el-icon-edit">
+                编辑
+              </el-button>
           </template>
         </el-table-column>
       </el-table>
-      <!--<div style="margin: 20px 0 20px 0;float: left">
-        <el-button>取消选择</el-button>
-        <el-button>批量删除</el-button>
-      </div>-->
     </el-card>
   </div>
 </template>
@@ -121,37 +86,10 @@
   export default {
     name: 'UserProfile',
     data () {
-      /* var validatePass = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请输入密码'))
-        } else {
-          if (this.selectedUser.checkPass !== '') {
-            this.$refs.selectedUser.validateField('checkPass')
-          }
-          callback()
-        }
-      }*/
-      /*var validatePass2 = (rule, value, callback) => {
-        if (value === '') {
-          callback(new Error('请再次输入密码'))
-        } else if (value !== this.selectedUser.password) {
-          callback(new Error('两次输入密码不一致!'))
-        } else {
-          callback()
-        }
-      }*/
       return {
         users: [],
         dialogFormVisible: false,
-        selectedUser: [],
-        /* rules: {
-          password: [
-            { message: '请输入密码', trigger: 'blur' }
-          ],
-          checkPass: [
-            { validator: validatePass2, trigger: 'blur' }
-          ]
-        }*/
+        selectedUser: []
       }
     },
     mounted () {
@@ -172,14 +110,6 @@
           }
         })
       },
-      /*listRoles () {
-        var _this = this
-        this.$axios.get('/admin/role').then(resp => {
-          if (resp && resp.data.code === 200) {
-            _this.roles = resp.data.result
-          }
-        })
-      },*/
       commitStatusChange (value, user) {
         if (user.username !== 'admin') {
           this.$axios.put('/user/status', {
@@ -200,21 +130,12 @@
         }
       },
       onSubmit (user) {
-        //let _this = this
-        // 根据视图绑定的角色 id 向后端传送角色信息
-        /*let roles = []
-        for (let i = 0; i < _this.selectedRolesIds.length; i++) {
-          for (let j = 0; j < _this.roles.length; j++) {
-            if (_this.selectedRolesIds[i] === _this.roles[j].id) {
-              roles.push(_this.roles[j])
-            }
-          }
-        }*/
         this.$axios.put('/userEdit', {
           username: user.username,
           name: user.name,
           phone: user.phone,
-          email: user.email
+          email: user.email,
+          password: user.password
           /*roles: roles*/
         }).then(resp => {
           if (resp && resp.data.code === 200){
@@ -228,39 +149,6 @@
       editUser (user) {
         this.dialogFormVisible = true
         this.selectedUser = user
-        /*let roleIds = []
-        for (let i = 0; i < user.roles.length; i++) {
-          roleIds.push(user.roles[i].id)
-        }
-        this.selectedRolesIds = roleIds*/
-      },
-      /*editpassword(user) {
-          this.$refs[dataForm].validate((valid) => {
-              if (valid) {
-                  alert('用户信息修改成功')
-                  this.dialogFormVisible = false
-                  // 修改角色后重新请求用户信息，实现视图更新
-                  this.listUser()
-                } else {
-                  this.$alert('修改失败!!')
-                }
-              })
-      },*/
-      editpassword(){
-        this.$prompt('请输入密码', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消'
-        }).then(()=>{
-          this.$message({
-            type: 'success',
-            message: '修改密码成功！'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });
-        })
       },
       resetPassword (username) {
         this.$axios.put('/user/password', {

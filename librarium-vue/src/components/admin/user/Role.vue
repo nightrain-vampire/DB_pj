@@ -41,9 +41,12 @@
     <role-create @onSubmit="listRoles()"></role-create>
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
-        :data="roles"
+        :data="roles.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
         stripe
         style="width: 100%"
+        :default-sort = "{prop: 'id', order: 'ascending'}"
+        :header-cell-style="styles"
+        :cell-style="styles"
         :max-height="tableHeight">
         <el-table-column
           type="selection"
@@ -64,9 +67,11 @@
           label="角色描述"
           fit>
         </el-table-column>
-        <el-table-column
-          label="状态"
-          width="100">
+        <el-table-column prop="enabled" label="状态" column-key="enabled"
+           :filters="[{ text:'正常', value: true},{ text:'禁用', value: false}]"
+           filter-placement="bottom-end"
+           :filter-multiple="false"
+           :filter-method="filterTag" width="100">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.enabled"
@@ -79,6 +84,12 @@
         <el-table-column
           label="操作"
           width="200">
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="输入角色名搜索"/>
+          </template>
           <template slot-scope="scope">
             <el-button
               type="primary"
@@ -122,7 +133,8 @@
           id: 'id',
           label: 'nameZh',
           children: 'children'
-        }
+        },
+        search:''
       }
     },
     mounted () {
@@ -136,6 +148,9 @@
       }
     },
     methods: {
+      filterTag(value,row){
+        return row.enabled === value;
+      },
       remove (row) {
         this.$confirm(`此操作将永久移除${row.nameZh}是否继续?`, '提示', {
           confirmButtonText: '确定',

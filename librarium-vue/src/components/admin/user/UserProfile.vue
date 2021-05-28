@@ -42,10 +42,12 @@
     <bulk-registration @onSubmit="listUsers()"></bulk-registration>
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
-        :data="users"
+        :data="users.filter(data => !search || data.username.toLowerCase().includes(search.toLowerCase()))"
         stripe
         :default-sort = "{prop: 'id', order: 'ascending'}"
         style="width: 100%"
+        :header-cell-style="styles"
+        :cell-style="styles"
         :max-height="tableHeight">
         <el-table-column
           type="selection"
@@ -78,9 +80,12 @@
           show-overflow-tooltip
           fit>
         </el-table-column>
-        <el-table-column
-          label="状态"
-          width="50">
+        <el-table-column prop="enabled" label="状态" column-key="enabled"
+                         :filters="[{ text:'正常', value: true},{ text:'禁用', value: false}]"
+                         filter-placement="bottom-end"
+                         :filter-multiple="false"
+                         :filter-method="filterTag"
+                         width="50">
           <template slot-scope="scope">
             <el-switch
               v-model="scope.row.enabled"
@@ -93,6 +98,12 @@
         <el-table-column
           label="操作"
           width="200">
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="输入用户名搜索"/>
+          </template>
           <template slot-scope="scope">
             <el-button
               @click="editUser(scope.row)"
@@ -130,7 +141,8 @@
             roles: [],
             dialogFormVisible: false,
             selectedUser: [],
-            selectedRolesIds: []
+            selectedRolesIds: [],
+            search:''
           }
       },
       mounted () {
@@ -143,6 +155,9 @@
         }
       },
       methods: {
+        filterTag(value,row){
+          return row.enabled === value;
+        },
         remove (row) {
           this.$confirm(`此操作将永久移除该${row.name}是否继续?`, '提示', {
             confirmButtonText: '确定',

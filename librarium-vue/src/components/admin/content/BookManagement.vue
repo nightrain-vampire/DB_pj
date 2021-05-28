@@ -52,12 +52,6 @@
           label="出版社"
           fit>
         </el-table-column>
-        <!--<el-table-column-->
-          <!--prop="abs"-->
-          <!--label="摘要"-->
-          <!--show-overflow-tooltip-->
-          <!--fit>-->
-        <!--</el-table-column>-->
         <el-table-column
           fixed="right"
           label="操作(展开查看摘要)"
