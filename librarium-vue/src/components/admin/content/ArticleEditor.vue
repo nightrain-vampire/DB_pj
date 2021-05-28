@@ -9,6 +9,19 @@
       </el-breadcrumb>
     </el-row>
     <el-row>
+      <el-date-picker
+        v-model="article.articleDate"
+        style="width: 1420px;position: page;margin: 10px 0px;font-size: 18px;"
+        type="datetime"
+        placeholder="请输入日期"
+        editable="false"
+        :default-value="new Date()"
+        align="right"
+        value-format="yyyy-MM-dd HH:mm:ss"
+        :picker-options="pickerOptions">
+      </el-date-picker>
+    </el-row>
+    <el-row>
       <el-input
         v-model="article.articleTitle"
         style="margin: 10px 0px;font-size: 18px;"
@@ -57,7 +70,29 @@
     data () {
       return {
         article: {},
-        dialogVisible: false
+        dialogVisible: false,
+        pickerOptions: {
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        }
       }
     },
     mounted () {

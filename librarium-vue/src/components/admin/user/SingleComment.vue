@@ -18,8 +18,13 @@
         </el-table-column>
         <el-table-column
           prop="commentTitle"
-          label="评论标题"
+          label="标题"
           width="300">
+        </el-table-column>
+        <el-table-column
+          prop="username"
+          label="留言者昵称"
+          width="200">
         </el-table-column>
         <el-table-column
           prop="commentDate"
@@ -46,16 +51,13 @@
           </template>
         </el-table-column>
       </el-table>
-      <div style="margin: 20px 0 50px 0">
-        <el-pagination
-          background
-          style="float:right;"
-          layout="total, prev, pager, next, jumper"
-          @current-change="handleCurrentChange"
-          :page-size="pageSize"
-          :total="total">
-        </el-pagination>
-      </div>
+    <el-row>
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page="currentPage"
+        :page-size="pageSize"
+        :total="comments.length"></el-pagination>
+    </el-row>
     </el-card>
   </div>
 </template>
@@ -65,12 +67,15 @@ export default {
   name: 'SingleComment',
   data () {
     return {
+      disabled: false,
+      values: true,
       comments: [],
       pageSize: 10,
+      currentPage: 1,
       total: 0,
     }
   },
-  mounted () {
+  mounted: function () {
     this.loadcomments()
   },
   computed: {
@@ -81,15 +86,16 @@ export default {
   methods: {
     loadcomments () {
       var _this = this
-      const uid = this.$store.state.id
-      this.$axios.get('/comment/' + uid + this.pageSize + '/1').then(resp => {
+      const userId = this.$store.state.id
+      this.$axios.get(`/mycomment/${userId}`).then(resp => {
         if (resp && resp.data.code === 200) {
-          _this.comments = resp.data.result.content
-          _this.total = resp.data.result.totalElements
+          //_this.comments = resp.data.result.content
+          //_this.total = resp.data.result.totalElements
+          this.comments = resp.data.result
         }
       })
     },
-    handleCurrentChange (page) {
+    handleCurrentChange: function (currentPage) {/*
       var _this = this
       const uid = this.$store.state.id
       this.$axios.get('/comment/' + uid + this.pageSize + '/' + page).then(resp => {
@@ -97,7 +103,8 @@ export default {
           _this.comments = resp.data.result.content
           _this.total = resp.data.result.totalElements
         }
-      })
+      })*/
+      this.currentPage=currentPage
     },
     viewcomment (id) {
       let commentUrl = this.$router.resolve(
@@ -135,8 +142,5 @@ export default {
 </script>
 
 <style scoped>
-.add-link {
-  margin: 18px 0 15px 10px;
-  float: left;
-}
+
 </style>

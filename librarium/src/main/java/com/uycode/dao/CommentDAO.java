@@ -12,7 +12,7 @@ import java.util.List;
 @Transactional
 public interface CommentDAO extends JpaRepository<Comment,Integer> {
     Comment findById(int id);
-    Comment findByUid(int uid);
+    //Comment findByUid(int uid);
 
     @Query(value = "select * from comment where uid = :uid",nativeQuery = true)
     List<Comment> findByUid(@Param("uid") Integer uid);
