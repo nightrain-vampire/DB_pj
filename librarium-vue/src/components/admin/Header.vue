@@ -9,6 +9,11 @@
         <i class="el-icon-switch-button" @click="logout" style="font-size: 40px;float: right"></i>
       </el-badge>
     </el-tooltip>
+    <el-tooltip class="item" effect="dark" content="修改密码" placement="bottom-start">
+      <el-badge is-dot class="item">
+        <i class="el-icon-s-tools" @click="myopen" style="font-size: 40px;float: right"></i>
+      </el-badge>
+    </el-tooltip>
     <el-breadcrumb class="text_eff"  separator="          ">
     <el-breadcrumb-item :to="{ path: '/jotter'}">文章列表</el-breadcrumb-item>
     <el-breadcrumb-item :to="{ path: '/library'}">图书馆</el-breadcrumb-item>
@@ -37,6 +42,29 @@
             _this.$router.matcher = newRouter.matcher
           }
         }).catch(failResponse => {})
+      },
+      myopen() {
+        this.$prompt('请输入新密码','提示',{
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+        }).then(({value})=>{
+          const username = this.$store.state.username;
+          const password = value;
+          this.$axios.put(`/user/editpassword/${username}/${password}`).then(resp => {
+            if(resp && resp.data.code === 200){
+              this.$message({
+                type: 'success',
+                message: '密码修改成功'
+              });
+              this.logout()
+            }
+          })
+        }).catch(() => {
+          this.$message({
+            type: "info",
+            message: '取消输入'
+          })
+        })
       }
     }
   }

@@ -144,4 +144,19 @@ public class UserService {
         }
         return true;
     }
+
+    public boolean editPassword(User user,String newness) {
+        User userInDB = userDAO.findByUsername(user.getUsername());
+        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+        int times = 2;
+        userInDB.setSalt(salt);
+        String encodedPassword = new SimpleHash("md5", newness, salt, times).toString();
+        userInDB.setPassword(encodedPassword);
+        try {
+            userDAO.save(userInDB);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
+    }
 }
