@@ -1,6 +1,7 @@
 package com.uycode.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
@@ -28,6 +29,7 @@ public class Ordered {
 
     private String time;
 
+    private String duetime;
 
 
 }

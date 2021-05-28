@@ -21,16 +21,6 @@ public class ProfileService {
     @Autowired
     AdminUserRoleService adminUserRoleService;
 
-    /*public List<User> list() {
-        List<User> users =  userDAO.list();
-        List<AdminRole> roles;
-        for (User user : users) {
-            roles = adminRoleService.listRolesByUser(user.getUsername());
-            user.setRoles(roles);
-        }
-        return users;
-    }*/
-
     public List<User> getUserInfo(String username){
         User user = userDAO.findByUsername(username);
         List<AdminRole> roles;
@@ -40,7 +30,6 @@ public class ProfileService {
         users.add(user);
         return users;
     }
-
 
     public boolean updateUserStatus(User user) {
         User userInDB = userDAO.findByUsername(user.getUsername());

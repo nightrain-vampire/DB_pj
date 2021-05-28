@@ -22,11 +22,4 @@ public class OrderedService {
         return ordereds;
     }
 
-    /*public List<Book> findBooksByUid(Integer uid){
-        List<Integer> booksId= orderDAO.findAllBidByUid(uid);
-
-        System.out.println(books);
-        return books;
-
-    }*/
 }

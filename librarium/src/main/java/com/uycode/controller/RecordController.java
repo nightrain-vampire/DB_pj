@@ -1,18 +1,23 @@
 package com.uycode.controller;
 
 
+import com.uycode.dao.BookDAO;
 import com.uycode.dao.OrderedDAO;
 import com.uycode.dao.ReturnedDAO;
-import com.uycode.entity.Ordered;
-import com.uycode.entity.Returned;
+import com.uycode.entity.*;
 import com.uycode.result.Result;
 import com.uycode.result.ResultFactory;
+import com.uycode.service.BookService;
+import com.uycode.service.ReturnedService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.time.LocalDateTime;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
+
 
 @RestController
 public class RecordController {
@@ -22,6 +27,15 @@ public class RecordController {
 
     @Autowired
     ReturnedDAO returnedDAO;
+
+    @Autowired
+    ReturnedService returnedService;
+
+    @Autowired
+    BookService bookService;
+
+    @Autowired
+    BookDAO bookDAO;
 
 
     @GetMapping("/api/getAllBorrowed")
@@ -36,7 +50,7 @@ public class RecordController {
 
 
     @DeleteMapping("api/bookReturn1/{id}")
-    public Result returnByAdmin(@PathVariable("id") Integer id){
+    public Result returnByAdmin(@PathVariable("id") Integer id) throws ParseException {
         Ordered ordered = orderedDAO.getOne(id);
         Returned returned = new Returned();
         returned.setUid(ordered.getUid());
@@ -48,6 +62,12 @@ public class RecordController {
          int hour = returnedTime.getHour();
          int minute = returnedTime.getMinute();
          int seconds = returnedTime.getSecond();
+         if(hour < 10)
+             hour = '0' + hour;
+        if(minute < 10)
+            minute = '0' + minute;
+        if(seconds < 10)
+            seconds = '0' + seconds;
          String returnedTimeString = year +"年"+month+"月"+day+"  "+hour+":"+minute+":"+seconds;
         returned.setTime(returnedTimeString);
         returnedDAO.save(returned);
@@ -68,4 +88,17 @@ public class RecordController {
         }
         return ResultFactory.buildSuccessResult(arr);
     }
+
+    @GetMapping("api/myreturned/{uid}")
+    public Result loadReturned(@PathVariable Integer uid){
+        /*List<Returned> returns = returnedDAO.findByUid(uid);
+        List<Book> books = new ArrayList<>();
+        for (Returned bid : returns
+        ) {
+            books.add(bookDAO.findBookById(bid.getBid()));
+        }*/
+        /*System.out.println(books);*/
+        return ResultFactory.buildSuccessResult(returnedDAO.listbyuid(uid));
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.uycode.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
@@ -15,7 +16,7 @@ public class Returned {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private int id;
+    private Integer id;
 
     /* @OneToOne
      @JoinColumn(name = "uid")*/
@@ -23,10 +24,14 @@ public class Returned {
 
     /*@OneToOne
     @JoinColumn(name = "bid")*/
-
+   // @Column(name="bid")
     private Integer bid;
 
+    // @Column(name="time")
     private String time;
+
+    private String duetime;
+
 
 
 

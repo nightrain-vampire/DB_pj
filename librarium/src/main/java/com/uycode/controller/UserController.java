@@ -1,5 +1,6 @@
 package com.uycode.controller;
 
+import com.uycode.dao.UserDAO;
 import com.uycode.result.Result;
 import com.uycode.result.ResultFactory;
 import com.uycode.entity.User;
@@ -14,6 +15,8 @@ public class UserController {
     UserService userService;
     @Autowired
     AdminUserRoleService adminUserRoleService;
+    @Autowired
+    UserDAO userDAO;
 
     @GetMapping("/api/admin/user")
     public Result listUsers() {
@@ -51,10 +54,19 @@ public class UserController {
         }
     }
 
-    @PutMapping("/api/admin/user")
+    @PutMapping("/api/admin/userEdit")
     public Result editUser(@RequestBody User requestUser) {
         if(userService.editUser(requestUser)) {
             return ResultFactory.buildSuccessResult("修改用户信息成功");
+        } else {
+            return ResultFactory.buildFailResult("参数错误，修改失败");
+        }
+    }
+
+    @PutMapping("/api/user/editpassword/{username}/{password}")
+    public Result editPassword(@PathVariable("username") String username, @PathVariable("password") String password) {
+        if(userService.editPassword(userDAO.findByUsername(username),password)) {
+            return ResultFactory.buildSuccessResult("修改用户密码成功");
         } else {
             return ResultFactory.buildFailResult("参数错误，修改失败");
         }
