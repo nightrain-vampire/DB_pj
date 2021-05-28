@@ -43,11 +43,15 @@ insert  into `admin_menu`(`id`,`path`,`name`,`name_zh`,`icon_cls`,`component`,`p
 (7,'/admin/user/role','Role','角色配置',NULL,'user/Role',3),
 (8,'/admin/content/book','BookManagement','图书管理',NULL,'content/BookManagement',4),
 (9,'/admin/content/banner','BannerManagement','广告管理',NULL,'content/BannerManagement',4),
-(10,'/admin/content/article','ArticleManagement','文章管理',NULL,'content/ArticleManagement',4),
+(10,'/admin/content/article','ArticleManagement','公告管理',NULL,'content/ArticleManagement',4),
 (17,'/admin/user/book','bookReturn','归还图书','el-icon-tickets','user/BorrowedBooks',1),
 (18,'/admin/record','Record','借阅记录',NULL,'user/OrderRecord',3),
-(19,'/admin/return','Return','归还记录',NULL,'user/ReturnRecord',3);
-
+(19,'/admin/return','Return','归还记录',NULL,'user/ReturnRecord',3),
+(20,'/admin/user/commentator','CommentEditor','留言服务',NULL,'user/CommentEditor',1),
+(21,'/admin/user/SingleReturnRecord','SingleReturnRecord','个人借阅情况',NULL,'user/SingleReturnRecord',1),
+(22,'/admin/content/CommentManagement','CommentManagement','留言管理',NULL,'content/CommentManagement',4),
+(23,'/admin/user/singleComment','SingleComment','个人留言',NULL,'user/SingleComment',1),
+(24,'/admin/user/singlestar','StarredBooks','收藏管理',NULL,'user/StarredBooks',1);
 /*Table structure for table `admin_permission` */
 
 DROP TABLE IF EXISTS `admin_permission`;
@@ -218,7 +222,7 @@ insert  into `book`(`id`,`cover`,`title`,`author`,`date`,`press`,`abs`,`cid`) va
 (67,'https://i.loli.net/2019/04/10/5cada9870c2ab.jpg','中心与边缘','[美] 希尔斯','2019-3','译林出版社','美国著名社会学家爱德华·希尔斯的主要研究成果包括他对“克里斯玛”、“中心”和“边缘”等概念的解释，以及他对“大众社会”一词的修正，这些研究对分析政治和文化领导力以及社会凝聚力具有重要价值。本书对希尔斯数十载社会理论研究进行了全面而详细的总结，为解释与探究当代社会的结构与变化提供了极具科学性的参考依据。',3),
 (68,'https://i.loli.net/2019/04/10/5cad643643d4c.jpg','水浒群星闪耀时','李黎','2019-4','上海文艺出版社','本书以众所周知的梁山英雄为写作对象，重点书写其上山后、招安前的日常生活，涉及他们的喜怒哀乐、同类中人、乡愁怀旧、未来憧憬、命运追问等。书中涉及宋江、武松、鲁智深、李俊、燕青等等耳熟能详的人物而显得有些“改编”与水浒研究的意味，但鉴于所有人物皆为虚构，本书稿的内容是虚构之上的虚构，旨在宏大叙事的语境下突出个人的细微之处和命运感。',1),
 (69,'https://i.loli.net/2019/04/10/5cad63931ce27.jpg','谋杀狄更斯','[美] 丹·西蒙斯 ','2019-4','上海文艺出版社','“狄更斯的那场意外灾难发生在1865年6月9日，那列搭载他的成功、平静、理智、手稿与情妇的火车一路飞驰，迎向铁道上的裂隙，突然触目惊心地坠落了。”',1),
-(70,'https://i.loli.net/2019/04/10/5cada940e206a.jpg','像艺术家一样思考','[英] 威尔·贡培兹','2019-4','湖南美术出版社','归纳成就艺术大师的 10 个关键词\n\n揭示大师们的创作秘辛\n\n凝聚 BBC 艺术频道主编威尔·贡培兹职业生涯的所见、所知、所想\n\n·\n\n威尔·贡培兹是你能遇到的最好的老师\n\n——《卫报》',3);
+(70,'https://i.loli.net/2019/04/10/5cad63f99f519.jpg','像艺术家一样思考','[英] 威尔·贡培兹','2019-4','湖南美术出版社','归纳成就艺术大师的 10 个关键词\n\n揭示大师们的创作秘辛\n\n凝聚 BBC 艺术频道主编威尔·贡培兹职业生涯的所见、所知、所想\n\n·\n\n威尔·贡培兹是你能遇到的最好的老师\n\n——《卫报》',3);
 
 /*Table structure for table `category` */
 
@@ -245,24 +249,32 @@ insert  into `category`(`id`,`name`) values
 DROP TABLE IF EXISTS `jotter_article`;
 
 CREATE TABLE `jotter_article` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '笔记编号',
-  `article_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '笔记名称',
-  `article_content_html` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '笔记内容（HTML格式）',
-  `article_content_md` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '笔记内容（MD格式）',
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '公告编号',
+  `article_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '公告名称',
+  `article_content_html` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '公告内容（HTML格式）',
+  `article_content_md` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '公告内容（MD格式）',
   `article_abstract` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '内容摘要',
-  `article_cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '笔记封面（路径）',
+  `article_cover` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '公告封面（路径）',
   `article_date` datetime DEFAULT NULL COMMENT '编辑时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 /*Data for the table `jotter_article` */
 
-insert  into `jotter_article`(`id`,`article_title`,`article_content_html`,`article_content_md`,`article_abstract`,`article_cover`,`article_date`) values
-(1,'凉风有兴','凉风有兴，秋月无边，而我思乡的情绪好比度日如年。虽然我风流倜傥玉树临风，但我还是有聪明的头脑和强健的臂腕。','凉风有兴，秋月无边，而我思乡的情绪好比度日如年。虽然我风流倜傥玉树临风，但我还是有聪明的头脑和强健的臂腕。','凉风有兴，秋月无边，而我思乡的情绪好比度日如年。','https://i.loli.net/2020/01/16/d2ZlKI1WRE4p7XB.png','2020-03-20 21:14:27'),
-(2,'其他笔记 --来自网络','<p>曾经有份真挚的爱情摆在我的面前，我没有珍惜，等到失去的时候才后悔莫急，人世间最痛苦的事莫过余此，如果上天在给我一次机会，我会对那个女孩说我爱你，如果要在这份爱上加个期限，我希望是一万年</p>\n','曾经有份真挚的爱情摆在我的面前，我没有珍惜，等到失去的时候才后悔莫急，人世间最痛苦的事莫过余此，如果上天在给我一次机会，我会对那个女孩说我爱你，如果要在这份爱上加个期限，我希望是一万年','曾经有份真挚的爱情摆在我的面前，我没有珍惜，等到失去的时候才后悔莫及，人世间最痛苦的事莫过于此。','','2020-03-20 00:00:00'),
-(3,'《图书管理系统》项目简介','<h2><a id=\"Screenshot_37png3_0\"></a><img src=\"3\" alt=\"Screenshot 37.png\" /></h2>\n<p><img src=\"https://img.shields.io/github/license/Antabot/White-Jotter\" alt=\"lisense\" /><br />\n<img src=\"https://img.shields.io/github/v/release/Antabot/White-Jotter\" alt=\"release\" /></p>\n<p>这是一个简单的前后端分离项目，主要采用 Vue.js + SpringBoot 技术栈开发。</p>\n<p>除了用作入门练习，我还希望该项目可以作为一些常见 Web 项目的脚手架，帮助大家简化搭建网站的流程。</p>\n<p>后台效果：<br />\n<img src=\"2\" alt=\"Screenshot 36.png\" /></p>\n<h1><a id=\"_14\"></a>技术栈</h1>\n<h2><a id=\"1_16\"></a>1.前端技术栈</h2>\n<p>1.Vue<br />\n2.ElementUI<br />\n3.axios</p>\n<h2><a id=\"2_22\"></a>2.后端技术栈</h2>\n<p>1.Spring Boot<br />\n2.Spring Data + JPA<br />\n3.MySQL<br />\n4.Shiro</p>\n<h1><a id=\"_29\"></a>部署方法</h1>\n<p>1.clone 项目到本地</p>\n<p><code>git clone git@github.com:UyCode/Project-Librarium.git</code></p>\n<p>2.数据库脚本放在 <code>database.sql</code>,在项目的根目录下，在MySQL中执行数据库脚本</p>\n<p>3.数据库配置在 <code>librarium</code> 项目的 <code>src\\main\\resources</code> 目录下的<code>application.properties</code> 文件中，mysql 版本为 8.0.15</p>\n<p>4.在IntelliJ IDEA中运行 <code>librarium</code> 项目，为了保证项目成功运行，可以右键点击 <code>pom.xml</code> 选择 maven -&gt; reimport ，并重启项目</p>\n<p>至此，服务端就启动成功了，同时，运行 <code>librarium-vue</code> 项目，访问 <code>http://localhost:8080</code> ，即可进入登录页面，默认账号是 <code>admin</code>，密码是 <code>123</code></p>\n<p>如果要做二次开发，请继续看第五、六步。</p>\n<p>5.进入到 <code>librarium-vue</code> 目录中，在命令行依次输入如下命令：</p>\n<pre><code class=\"lang-\"># 安装依赖\nnpm install\n\n# 在 localhost:8181 启动项目\nnpm run dev\n\n</code></pre>\n<p>由于在 <code>librarium-vue</code> 项目中已经配置了端口转发，将数据转发到SpringBoot上，因此项目启动之后，在浏览器中输入 <code>http://localhost:8181</code> 就可以访问我们的前端项目了，所有的请求通过端口转发将数据传到 SpringBoot 中（注意此时不要关闭 SpringBoot 项目）。</p>\n<p>6.最后可以用 <code>WebStorm</code> 等工具打开 <code>librarium-vue</code>项目，继续开发，开发完成后，当项目要上线时，依然进入到 <code>librarium-vue</code> 目录，然后执行如下命令：</p>\n<pre><code class=\"lang-\">npm run build\n</code></pre>\n<p>该命令执行成功之后， <code>librarium-vue</code> 目录下生成一个 <code>dist</code> 文件夹，可以将该文件夹中的两个文件 <code>static</code> 和 <code>index.html</code> 拷贝到 <code>librarium</code> 项目中 <code>webapp/</code> 目录下，然后直接运行 <code>librarium</code> 项目，访问 <code>http://localhost:8080</code> ，实际上是把前端打包后作为静态文件，但不推荐使用这种方式。</p>\n<p>(持续更新中)</p>\n','![Screenshot 37.png](3)\n---\n\n![lisense](https://img.shields.io/github/license/Antabot/White-Jotter)\n![release](https://img.shields.io/github/v/release/Antabot/White-Jotter)\n\n\n这是一个简单的前后端分离项目，主要采用 Vue.js + SpringBoot 技术栈开发。\n\n除了用作入门练习，我还希望该项目可以作为一些常见 Web 项目的脚手架，帮助大家简化搭建网站的流程。\n\n后台效果：\n![Screenshot 36.png](2)\n\n# 技术栈\n\n## 1.前端技术栈\n\n1.Vue  \n2.ElementUI  \n3.axios   \n\n## 2.后端技术栈\n\n1.Spring Boot  \n2.Spring Data + JPA \n3.MySQL  \n4.Shiro\n\n# 部署方法\n\n1.clone 项目到本地\n\n`git clone git@github.com:UyCode/Project-Librarium.git`\n\n2.数据库脚本放在 `database.sql`,在项目的根目录下，在MySQL中执行数据库脚本  \n\n3.数据库配置在 `librarium` 项目的 `src\\main\\resources` 目录下的`application.properties` 文件中，mysql 版本为 8.0.15   \n\n4.在IntelliJ IDEA中运行 `librarium` 项目，为了保证项目成功运行，可以右键点击 `pom.xml` 选择 maven -> reimport ，并重启项目\n\n至此，服务端就启动成功了，同时，运行 `librarium-vue` 项目，访问 `http://localhost:8080` ，即可进入登录页面，默认账号是 `admin`，密码是 `123`\n\n如果要做二次开发，请继续看第五、六步。\n\n5.进入到 `librarium-vue` 目录中，在命令行依次输入如下命令：  \n\n```\n# 安装依赖\nnpm install\n\n# 在 localhost:8181 启动项目\nnpm run dev\n\n```  \n\n由于在 `librarium-vue` 项目中已经配置了端口转发，将数据转发到SpringBoot上，因此项目启动之后，在浏览器中输入 `http://localhost:8181` 就可以访问我们的前端项目了，所有的请求通过端口转发将数据传到 SpringBoot 中（注意此时不要关闭 SpringBoot 项目）。\n\n6.最后可以用 `WebStorm` 等工具打开 `librarium-vue`项目，继续开发，开发完成后，当项目要上线时，依然进入到 `librarium-vue` 目录，然后执行如下命令：  \n\n```\nnpm run build\n```  \n\n该命令执行成功之后， `librarium-vue` 目录下生成一个 `dist` 文件夹，可以将该文件夹中的两个文件 `static` 和 `index.html` 拷贝到 `librarium` 项目中 `webapp/` 目录下，然后直接运行 `librarium` 项目，访问 `http://localhost:8080` ，实际上是把前端打包后作为静态文件，但不推荐使用这种方式。\n\n(持续更新中)\n','Project-Librarium---图书管理系统是一个简单的前后端分离项目，主要采用 Vue.js + SpringBoot 技术栈开发。','http://localhost:8080/api/file/h2wg3t.png','2020-03-20 00:00:00'),
-(11,'Hello','<h3><a id=\"hello_0\"></a>hello</h3>\n<h1><a id=\"hello_1\"></a>hello</h1>\n<hr />\n<blockquote>\n<p>this is markdown editor</p>\n</blockquote>\n<p><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi></mrow><annotation encoding=\"application/x-tex\">\\alpha + \\beta\n</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"strut\" style=\"height:0.69444em;\"></span><span class=\"strut bottom\" style=\"height:0.8888799999999999em;vertical-align:-0.19444em;\"></span><span class=\"base\"><span class=\"mord mathit\" style=\"margin-right:0.0037em;\">α</span><span class=\"mbin\">+</span><span class=\"mord mathit\" style=\"margin-right:0.05278em;\">β</span></span></span></span></span></p>\n','### hello\n# hello\n---\n> this is markdown editor\n\n$$\n\\alpha + \\beta\n$$',NULL,NULL,NULL),
-(12,'Markdown','<h1><a id=\"Markdown_editor_0\"></a>Markdown editor</h1>\n<hr />\n<p><span class=\"katex-display\"><span class=\"katex\"><span class=\"katex-mathml\"><math><semantics><mrow><mi>α</mi><mo>+</mo><mi>β</mi></mrow><annotation encoding=\"application/x-tex\">\\alpha + \\beta\n</annotation></semantics></math></span><span class=\"katex-html\" aria-hidden=\"true\"><span class=\"strut\" style=\"height:0.69444em;\"></span><span class=\"strut bottom\" style=\"height:0.8888799999999999em;vertical-align:-0.19444em;\"></span><span class=\"base\"><span class=\"mord mathit\" style=\"margin-right:0.0037em;\">α</span><span class=\"mbin\">+</span><span class=\"mord mathit\" style=\"margin-right:0.05278em;\">β</span></span></span></span></span></p>\n','# Markdown editor\n---\n$$\n\\alpha + \\beta\n$$',NULL,NULL,NULL);
+/*insert  into `jotter_article`(`id`,`article_title`,`article_content_html`,`article_content_md`,`article_abstract`,`article_cover`,`article_date`) values*/
+
+/*Table structure for table `starred` */
+DROP TABLE IF EXISTS `starred`;
+
+CREATE TABLE `starred` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '收藏编号',
+  `uid` int(11) DEFAULT NULL COMMENT '用户编号',
+  `bid` int(11) DEFAULT NULL COMMENT '图书编号',
+  `time` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT 'null' COMMENT '收藏日期',
+   PRIMARY KEY (`id`),
+   KEY `uid` (`uid`),
+   KEY `bid` (`bid`)
+)ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;
 
 /*Table structure for table `ordered` */
 
@@ -273,6 +285,7 @@ CREATE TABLE `ordered` (
   `uid` int(11) DEFAULT NULL COMMENT '用户编号',
   `bid` int(11) DEFAULT NULL COMMENT '图书编号',
   `time` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT 'null' COMMENT '借阅日期',
+  `duetime` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT 'null' COMMENT '应还日期',
   PRIMARY KEY (`id`),
   KEY `uid` (`uid`),
   KEY `bid` (`bid`)
@@ -280,23 +293,23 @@ CREATE TABLE `ordered` (
 
 /*Data for the table `ordered` */
 
-insert  into `ordered`(`id`,`uid`,`bid`,`time`) values
-(50,24,109,'null'),
-(53,28,70,'null'),
-(56,28,109,'null'),
-(94,1,69,'2020年5月14日  13:57:42'),
-(95,1,68,'2020年5月14日  13:57:44'),
-(97,25,70,'2020年5月14日  22:23:3'),
-(98,25,64,'2020年5月14日  22:23:5'),
-(99,25,59,'2020年5月14日  22:23:12'),
-(100,25,37,'2020年5月14日  22:23:15'),
-(101,25,1,'2020年5月14日  22:23:20'),
-(102,2,65,'2020年5月14日  22:24:24'),
-(103,2,63,'2020年5月14日  22:24:26'),
-(104,2,68,'2020年5月14日  22:24:28'),
-(107,1,2,'2020年5月15日  1:9:51'),
-(109,1,70,'2020年5月30日  11:28:19'),
-(110,1,63,'2020年5月30日  12:5:54');
+insert  into `ordered`(`id`,`uid`,`bid`,`time`,`duetime`) values
+(50,24,109,'null','null'),
+(53,28,70,'null','null'),
+(56,28,109,'null','null'),
+(94,1,69,'2020年5月14日  13:57:42','2020年8月14日  13:57:42'),
+(95,1,68,'2020年5月14日  13:57:44','2020年8月14日  13:57:44'),
+(97,25,70,'2020年5月14日  22:23:03','2020年8月14日  22:23:03'),
+(98,25,64,'2020年5月14日  22:23:50','2020年8月14日  22:23:50'),
+(99,25,59,'2020年5月14日  22:23:12','2020年8月14日  22:23:12'),
+(100,25,37,'2020年5月14日  22:23:15','2020年8月14日  22:23:15'),
+(101,25,1,'2020年5月14日  22:23:20','2020年8月14日  22:23:20'),
+(102,2,65,'2020年5月14日  22:24:24','2020年8月14日  22:24:24'),
+(103,2,63,'2020年5月14日  22:24:26','2020年8月14日  22:24:26'),
+(104,2,68,'2020年5月14日  22:24:28','2020年8月14日  22:24:28'),
+(107,1,2,'2020年5月15日  10:09:51','2020年8月15日  10:09:51'),
+(109,1,70,'2020年5月30日  11:28:19','2020年8月30日  11:28:19'),
+(110,1,63,'2020年5月30日  12:50:54','2020年8月30日  12:50:54');
 
 /*Table structure for table `returned` */
 
@@ -306,23 +319,24 @@ CREATE TABLE `returned` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
   `uid` int(11) DEFAULT NULL COMMENT '用户编号',
   `bid` int(11) DEFAULT NULL COMMENT '图书编号',
+  `duetime` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT 'null' COMMENT '应还日期',
   `time` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT 'null' COMMENT '归还时间',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 /*Data for the table `returned` */
 
-insert  into `returned`(`id`,`uid`,`bid`,`time`) values
-(13,2,32,'2020年5月14  21:58:58'),
-(14,3,70,'2020年5月14  21:59:1'),
-(15,3,69,'2020年5月14  21:59:3'),
-(16,25,70,'2020年5月14  21:59:6'),
-(17,25,69,'2020年5月14  21:59:8'),
-(18,1,70,'2020年5月14  22:18:43'),
-(19,1,63,'2020年5月29  22:14:39'),
-(20,1,70,'2020年5月30  11:28:8'),
-(21,1,64,'2020年5月30  12:6:41'),
-(22,2,32,'2020年5月30  12:15:15');
+insert  into `returned`(`id`,`uid`,`bid`,`duetime`,`time`) values
+(13,2,32,'2020年3月14日  13:58:58','2020年5月14日  21:58:58'),
+(14,3,70,'2020年6月14日  21:59:10','2020年5月14日  21:59:10'),
+(15,3,69,'2020年5月16日  21:59:03','2020年5月14日  21:59:03'),
+(16,25,70,'2020年5月13日  11:59:06','2020年5月14日  21:59:06'),
+(17,25,69,'2020年5月15日  21:59:08','2020年5月14日  21:59:08'),
+(18,1,70,'2020年4月14日  22:18:43','2020年5月14日  22:18:43'),
+(19,1,63,'2020年5月31日  22:14:39','2020年5月29日  22:14:39'),
+(20,1,70,'2020年5月30日  10:28:08','2020年5月30日  11:28:08'),
+(21,1,64,'2020年5月29日  12:06:41','2020年5月30日  12:06:41'),
+(22,2,32,'2020年5月30日  12:18:15','2020年5月30日  12:15:15');
 
 /*Table structure for table `user` */
 
@@ -347,7 +361,20 @@ insert  into `user`(`id`,`username`,`password`,`salt`,`name`,`phone`,`email`,`en
 (2,'test','ee67f703c63c09207a2aa82feb86e723','laluHHt9MauEDVEI2cSzUQ==','测试用户','15616258066','Hyper-Hack@outlook.com',1),
 (3,'editor','8583a2d965d6159edbf65c82d871fa3e','MZTe7Qwf9QgXBXrZzTIqJQ==','编辑',NULL,NULL,1),
 (25,'visitor','f2aa782914b93d35fd2dd19bdf3a7778','YtRri1YvnlVcLxYQtml7NQ==','ahmatjan','456789','xdcfgvbhjn',1);
+/*Table structure for table `comment` */
+DROP TABLE IF EXISTS `comment`;
 
+CREATE TABLE `comment` (
+    `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+    `username` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci COMMENT '用户昵称',
+    `uid` int(11)  COMMENT '用户编号',
+    `comment_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL COMMENT '评论标题',
+    `comment_content_html` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '评论内容（HTML格式）',
+    `comment_content_md` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci COMMENT '评论内容（MD格式）',
+    `time` varchar(45) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT 'null' COMMENT '最新评论时间',
+    PRIMARY KEY (`id`),
+    CONSTRAINT `fk_comment_on_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
