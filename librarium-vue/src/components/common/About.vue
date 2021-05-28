@@ -1,7 +1,7 @@
 <template>
   <div class="footer">
     <div style="border-top:1px #1F1F1F solid;">
-      <p class="alt" style="color:#999; line-height:0">&copy; 版权所有：UyCode 艾合买提&nbsp;
+      <p class="alt" style="color:#999; line-height:0">&copy; 版权所有：NightRain && siluhuayu&nbsp;
         <span>技术支持：</span>
         <a href="" target="_blank" style="color:#999;">Vue.js & Spring-Boot</a>
       </p>

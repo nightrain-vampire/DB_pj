@@ -58,12 +58,12 @@
           </template>
         </el-table-column>-->
         <el-table-column>
-        <template slot="header" slot-scope="scope">
-          <el-input
-            v-model="search"
-            size="mini"
-            placeholder="输入用户名搜索"/>
-        </template>
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="输入用户名搜索"/>
+          </template>
           <template slot-scope="scope">
             <el-button
               @click="returnByAdmin(scope.row)"
@@ -84,68 +84,65 @@
 </template>
 
 <script>
-  /* eslint-disable */
-
-  export default {
-    name: "OrderRecord",
-
-    data () {
-      return {
-        borrowed: [],
-        selectedBorrowed: [],
-        search:''
-      }
+/* eslint-disable */
+export default {
+  name: "OrderRecord",
+  data () {
+    return {
+      borrowed: [],
+      selectedBorrowed: [],
+      search:''
+    }
+  },
+  mounted () {
+    this.listAllBorrowed()
+  },
+  computed: {
+    tableHeight () {
+      return window.innerHeight - 320
     },
-    mounted () {
-      this.listAllBorrowed()
-    },
-    computed: {
-      tableHeight () {
-        return window.innerHeight - 320
-      },
-      styles(row, column, rowIndex, columnIndex){
-        return 'text-align:center';
-      }
-    },
-    methods: {
-      returnByAdmin (row) {
-        this.$confirm(`此操作将强制归还${row.title}，是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          const rowName = row.name;
-          const rowTitle = row.title;
-          this.$axios.delete('/bookReturn1/'+row.id).then( resp =>{
-            if(resp && resp.data.code === 200){
-              this.listAllBorrowed()
-              this.$notify.success({
-                title: '强制归还成功',
-                message: `你已经移除了${rowName}借阅的${rowTitle}`
-              })
-            }
-          }).catch(error=> {
-            this.$notify.error({
-              title: '网络错误！',
-              message: '请稍后重试！'
+    styles(row, column, rowIndex, columnIndex){
+      return 'text-align:center';
+    }
+  },
+  methods: {
+    returnByAdmin (row) {
+      this.$confirm(`此操作将强制归还${row.title}，是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const rowName = row.name;
+        const rowTitle = row.title;
+        this.$axios.delete('/bookReturn1/'+row.id).then( resp =>{
+          if(resp && resp.data.code === 200){
+            this.listAllBorrowed()
+            this.$notify.success({
+              title: '强制归还成功',
+              message: `你已经移除了${rowName}借阅的${rowTitle}`
             })
+          }
+        }).catch(error=> {
+          this.$notify.error({
+            title: '网络错误！',
+            message: '请稍后重试！'
           })
         })
-      },
-      listAllBorrowed () {
-        var _this = this
-        this.$axios.get('/getAllBorrowed').then(resp => {
-          console.log('listed')
-          if (resp && resp.data.code === 200) {
-            console.log("return success!")
-            this.borrowed = resp.data.result
-          }
-        })
-      }
+      })
+    },
+    listAllBorrowed () {
+      var _this = this
+      this.$axios.get('/getAllBorrowed').then(resp => {
+        console.log('listed')
+        if (resp && resp.data.code === 200) {
+          console.log("return success!")
+          this.borrowed = resp.data.result
+        }
+      })
     }
-    }
+  }
+}
 </script>
 
 <style scoped>
-
 </style>

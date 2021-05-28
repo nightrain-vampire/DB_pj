@@ -39,145 +39,115 @@
           width="120">
         </el-table-column>
         <el-table-column
-          prop="duetime"
-          label="应还日期"
-          sortable
-          fit>
-        </el-table-column>
-        <el-table-column
           prop="time"
           label="归还日期"
           sortable
           fit>
         </el-table-column>
-        <el-table-column
-          prop="overdue"
-          label="是否逾期"
-          fit>
-          <template slot-scope="scope">
-            {{scope.row.overdue?'逾期':'未逾期'}}
-          </template>
-        </el-table-column>
         <el-table-column>
-        <template slot="header" slot-scope="scope">
-          <el-input
-            v-model="search"
-            size="mini"
-            placeholder="输入用户名搜索"/>
-        </template>
-          <template slot-scope="scope">
-            <el-button
-              @click="deleteRecord(scope.row)"
-              type="danger"
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
               size="mini"
-              class="el-icon-delete">
-              删除记录
-            </el-button>
+              placeholder="输入用户名搜索"/>
           </template>
         </el-table-column>
       </el-table>
-      <div style="margin: 20px 0 20px 0;float: left">
-        <el-button type="warning"  class="el-icon-close" @click="toggleSelection">取消选择</el-button>
-        <el-button type="danger"  class="el-icon-delete" @click="deletes">批量删除</el-button>
-      </div>
     </el-card>
   </div>
 </template>
 
 <script>
-  /* eslint-disable */
-
-  export default {
-    name: "ReturnedRecord",
-
-    data () {
-      return {
-        returned: [],
-        search:'',
-        multipleSelection: []
-      }
+/* eslint-disable */
+export default {
+  name: "ReturnedRecord",
+  data () {
+    return {
+      returned: [],
+      search:'',
+      multipleSelection: []
+    }
+  },
+  mounted () {
+    this.listAllReturned()
+  },
+  computed: {
+    tableHeight () {
+      return window.innerHeight - 320
     },
-    mounted () {
-      this.listAllReturned()
-    },
-    computed: {
-      tableHeight () {
-        return window.innerHeight - 320
-      },
-      styles(row, column, rowIndex, columnIndex){
-        return 'text-align:center';
-      }
-    },
-    methods: {
-      deletes() {
-        var arr=[];
-        var datas = this.$refs.multipleTable.selection;
-        datas.forEach(function(item){
-          arr.push(item.id)
-        });
-        this.$confirm(`此操作将删除所有所选记录，是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$axios.post('/multipleDelete/',arr).then( resp =>{
-            if(resp && resp.data.code === 200){
-              this.listAllReturned()
-              this.$notify.success({
-                title: '删除记录成功！',
-                message: `你已经删除所有所选记录`
-              })
-            }
-          }).catch(error=> {
-            this.$notify.error({
-              title: '网络错误！',
-              message: '请稍后重试！'
+    styles(row, column, rowIndex, columnIndex){
+      return 'text-align:center';
+    }
+  },
+  methods: {
+    deletes() {
+      var arr=[];
+      var datas = this.$refs.multipleTable.selection;
+      datas.forEach(function(item){
+        arr.push(item.id)
+      });
+      this.$confirm(`此操作将删除所有所选记录，是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$axios.post('/multipleDelete/',arr).then( resp =>{
+          if(resp && resp.data.code === 200){
+            this.listAllReturned()
+            this.$notify.success({
+              title: '删除记录成功！',
+              message: `你已经删除所有所选记录`
             })
-          })
-        })
-      },
-      deleteRecord (row) {
-        this.$confirm(`此操作将强制归还${row.title}，是否继续?`, '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          const rowName = row.name;
-          const rowTitle = row.title;
-          this.$axios.delete('/deleteReturned/'+row.id).then( resp =>{
-            if(resp && resp.data.code === 200){
-              this.listAllReturned()
-              this.$notify.success({
-                title: '删除记录成功！',
-                message: `你已经移除了${rowName}借阅的${rowTitle}`
-              })
-            }
-          }).catch(error=> {
-            this.$notify.error({
-              title: '网络错误！',
-              message: '请稍后重试！'
-            })
-          })
-        })
-      },
-      listAllReturned () {
-        var _this = this
-        this.$axios.get('/getAllReturned').then(resp => {
-          if (resp && resp.data.code === 200) {
-            this.returned = resp.data.result
           }
+        }).catch(error=> {
+          this.$notify.error({
+            title: '网络错误！',
+            message: '请稍后重试！'
+          })
         })
-      },
-      toggleSelection(){
-          this.$refs.multipleTable.clearSelection();
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      }
+      })
+    },
+    deleteRecord (row) {
+      this.$confirm(`此操作将强制归还${row.title}，是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        const rowName = row.name;
+        const rowTitle = row.title;
+        this.$axios.delete('/deleteReturned/'+row.id).then( resp =>{
+          if(resp && resp.data.code === 200){
+            this.listAllReturned()
+            this.$notify.success({
+              title: '删除记录成功！',
+              message: `你已经移除了${rowName}借阅的${rowTitle}`
+            })
+          }
+        }).catch(error=> {
+          this.$notify.error({
+            title: '网络错误！',
+            message: '请稍后重试！'
+          })
+        })
+      })
+    },
+    listAllReturned () {
+      var _this = this
+      this.$axios.get('/getAllReturned').then(resp => {
+        if (resp && resp.data.code === 200) {
+          this.returned = resp.data.result
+        }
+      })
+    },
+    toggleSelection(){
+      this.$refs.multipleTable.clearSelection();
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val;
     }
   }
+}
 </script>
 
 <style scoped>
-
 </style>

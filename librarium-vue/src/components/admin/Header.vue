@@ -6,14 +6,15 @@
     <span style="font-size: 32px;font-weight: bold;position:absolute;left: 100px">后台管理</span>
     <el-tooltip class="item" effect="dark" content="点击退出" placement="bottom-start">
       <el-badge is-dot class="item">
-        <i class="el-icon-user-solid" @click="logout" style="font-size: 40px;float: right"></i>
+        <i class="el-icon-switch-button" @click="logout" style="font-size: 40px;float: right"></i>
       </el-badge>
     </el-tooltip>
     <el-breadcrumb class="text_eff"  separator="          ">
     <el-breadcrumb-item :to="{ path: '/jotter'}">文章列表</el-breadcrumb-item>
     <el-breadcrumb-item :to="{ path: '/library'}">图书馆</el-breadcrumb-item>
     <el-breadcrumb-item :to="{ path: '/admin/dashboard'}" replace>管理中心</el-breadcrumb-item>
-    <el-breadcrumb-item :to="{ path: ''}"></el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/commentBoard'}">留言板</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: ''}"></el-breadcrumb-item>
   </el-breadcrumb>
     <!--<i class="el-icon-switch-button" v-on:click="logout" style="font-size: 40px;float: right"></i>-->
   </el-card>

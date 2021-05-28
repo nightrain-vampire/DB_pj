@@ -18,8 +18,7 @@
         <p slot="content" style="font-size: 13px;margin-bottom: 6px">
           <span>{{item.author}}</span> /
           <span>{{item.date}}</span> /
-          <span>{{item.press}}</span> /
-          <span>剩余数目:{{item.amount}}</span>
+          <span>{{item.press}}</span>
         </p>
         <p slot="content" style="width: 300px" class="abstract">{{item.abs}}</p>
         <el-card class="card"
@@ -34,18 +33,13 @@
             </div>
           </div>
           <div class="author">{{item.author}}</div>
-          <el-button type="warning"
-                     @click="borrow(item)"
-                     :key="item.id"
-                     style="float: bottom; width: 180px">
-              <i class="el-icon-collection"></i>    借  阅
+          <el-button
+            type="warning"
+            @click="borrow(item)"
+            :key="item.id"
+            style="float: bottom; width: 180px">
+            <i class="el-icon-collection"></i>    借  阅
           </el-button>
-          <!--<el-button type="warning"
-                     @click="preserve(item)"
-                     :key="item.id"
-                     style="float: bottom; width: 180px">
-              <i class="el-icon-collection"></i>    预  约
-          </el-button>-->
         </el-card>
       </el-tooltip>
     </el-row>
@@ -77,7 +71,8 @@
         borrowed: {
           uid: this.$store.state.id,
           bid: 0,
-          time:''
+          time:'',
+          duetime:''
         }
       }
     },
@@ -104,104 +99,55 @@
         if (this.$store.state.id === '') {
           console.log("未登录，不能借阅！");
           this.$router.push('/login')
-        }
-        else{
+        } else {
           const title = item.title;
-          this.borrowed.bid = item.id
+          this.borrowed.bid = item.id;
           const borrowTime = new Date();
           const year = borrowTime.getFullYear();
-          const month = borrowTime.getMonth()+1;
+          const month = borrowTime.getMonth() + 1;
           const day = borrowTime.getDate();
           const hour = borrowTime.getHours();
           const minute = borrowTime.getMinutes();
           const seconds = borrowTime.getSeconds();
           this.borrowed.time = `${year}年${month}月${day}日  ${hour}:${minute}:${seconds}`;
           let dday = day;
-          if(month-9 === 2 && dday > 28){
-            if((year%4===0 && year%100)||year%400===0)
+          if (month - 9 === 2 && dday > 28) {
+            if ((year % 4 === 0 && year % 100) || year % 400 === 0)
               dday = 29;
             else
               dday = 28;
-          }
-          else if(dday===30 && ((month+3)%12 === 1 || (month+3)%12 === 3 || (month+3)%12 === 5 ||
-          (month+3)%12 === 7 || (month+3)%12 === 8 || (month+3)%12 === 10 || (month+3)%12 === 12))
+          } else if (dday === 30 && ((month + 3) % 12 === 1 || (month + 3) % 12 === 3 || (month + 3) % 12 === 5 ||
+            (month + 3) % 12 === 7 || (month + 3) % 12 === 8 || (month + 3) % 12 === 10 || (month + 3) % 12 === 12))
             dday = 31;
-          else if(dday === 31 && ((month+3)%12 === 4 || (month+3)%12 === 6 || (month+3)%12 === 9 ||
-            (month+3)%12 === 11))
+          else if (dday === 31 && ((month + 3) % 12 === 4 || (month + 3) % 12 === 6 || (month + 3) % 12 === 9 ||
+            (month + 3) % 12 === 11))
             dday = 30;
-
-          this.borrowed.duetime = `${month+3>12?year+1:year}年${month+3>12?month-9:month+3}月${dday}日  ${hour}:${minute}:${seconds}`
-          this.borrowed.overdue = 0;
-          const _this = this
-          this.$axios.post('/borrow',this.borrowed).then( resp =>{
-            if(resp && resp.data.code === 200) {
+          this.borrowed.duetime = `${month+3>12?year+1:year}年${month+3>12?month-9:month+3}月${dday}日  ${hour}:${minute}:${seconds}`;
+          this.$axios.post('/borrow', this.borrowed).then(resp => {
+            if (resp && resp.data.code === 200) {
               this.$notify.success({
-                title:"成功！",
+                title: "成功！",
                 message: `你成功借阅《${title}》！`
               })
 
-            }
-            else if(resp.data.code ===400) {
-              var indexs = this.books.findIndex(item =>{
-                if(item.id === this.borrowed.bid){
+            } else if (resp.data.code === 400) {
+              /*var indexs = */this.books.findIndex(item => {
+                if (item.id === this.borrowed.bid) {
                   return true
                 }
               })
-              this.books.splice(indexs,1)
+              //this.books.splice(indexs, 1)  //点击后已借阅的图书会消失
               this.$notify({
                 title: '错误！',
                 message: `你已经借阅《${title}》！`,
                 type: 'error'
               })
             }
-          }).catch( error =>{
+          }).catch(error => {
             console.log(error)
           })
         }
       },
-     /* preserve (item) {
-        if (this.$store.state.id === '') {
-          console.log("未登录，不能预约！");
-          this.$router.push('/login')
-        }
-        else{
-          const title = item.title;
-          this.preserved.pid = item.id
-          const preserveTime = new Date();
-          const year = preserveTime.getFullYear();
-          const month = preserveTime.getMonth()+1;
-          const day = preserveTime.getDate();
-          const hour = preserveTime.getHours();
-          const minute = preserveTime.getMinutes();
-          const seconds = preserveTime.getSeconds();
-          this.preserved.time = `${year}年${month}月${day}日  ${hour}:${minute}:${seconds}`
-          const _this = this
-          this.$axios.post('/preserve',this.preserved).then( resp =>{
-            if(resp && resp.data.code === 200) {
-              this.$notify.success({
-                title:"成功！",
-                message: `你成功预约《${title}》！`
-              })
-
-            }
-            else if(resp.data.code ===400) {
-              var indexs = this.books.findIndex(item =>{
-                if(item.id === this.borrowed.bid){
-                  return true
-                }
-              })
-              this.books.splice(indexs,1)
-              this.$notify({
-                title: '错误！',
-                message: `你已经预约/借阅《${title}》！`,
-                type: 'error'
-              })
-            }
-          }).catch( error =>{
-            console.log(error)
-          })
-        }
-      },*/
       changeView (event) {
         this.disabled = !event
       },
