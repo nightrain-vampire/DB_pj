@@ -51,6 +51,15 @@ public class UserController {
         }
     }
 
+    @PutMapping("/api/admin/user/resetpassword")
+    public Result handleRestPwd(@PathVariable("username") String username,@PathVariable("password") String password) {
+        if(userService.resetUserPwd(username,password)) {
+            return ResultFactory.buildSuccessResult("修改密码成功");
+        } else {
+            return ResultFactory.buildFailResult("参数错误，修改失败");
+        }
+    }
+
     @PutMapping("/api/admin/user")
     public Result editUser(@RequestBody User requestUser) {
         if(userService.editUser(requestUser)) {

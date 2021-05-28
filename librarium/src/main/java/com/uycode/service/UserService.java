@@ -116,6 +116,21 @@ public class UserService {
         } return true;
     }
 
+    public boolean resetUserPwd(String username,String password){
+        User userInDB = userDAO.findByUsername(username);
+        String salt = new SecureRandomNumberGenerator().nextBytes().toString();
+        int times = 2;
+        userInDB.setSalt(salt);
+        String encodedPassword = new SimpleHash("md5", password, salt, times).toString();
+        userInDB.setPassword(encodedPassword);
+        try {
+            userDAO.save(userInDB);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+        return true;
+    }
+
     public boolean resetPassword(User user) {
         User userInDB = userDAO.findByUsername(user.getUsername());
         String salt = new SecureRandomNumberGenerator().nextBytes().toString();
@@ -136,6 +151,9 @@ public class UserService {
         userInDB.setName(user.getName());
         userInDB.setPhone(user.getPhone());
         userInDB.setEmail(user.getEmail());
+        /*String password = user.getPassword();
+        password = HtmlUtils.htmlEscape(password);
+        userInDB.setPassword(password);*/
         try {
             userDAO.save(userInDB);
             adminUserRoleService.saveRoleChanges(userInDB.getId(), user.getRoles());
