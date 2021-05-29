@@ -1,0 +1,167 @@
+<template>
+  <body id="paper">
+  <transition name="el-zoom-in-center">
+  <el-form :model="loginForm"
+           :rules="rules"
+           class="register-container transition-box"
+           v-show="show1"
+           label-position="left"
+           label-width="0px"
+           v-loading="loading">
+    <h3 class="register_title">图书管理系统用户注册</h3>
+    <el-form-item prop="username">
+      <el-input type="text" v-model="loginForm.username"
+                auto-complete="off" placeholder="账号"></el-input>
+    </el-form-item>
+    <el-form :model="loginForm" status-icon :rules="rules" ref="ruleForm" class="demo-ruleForm">
+      <el-form-item prop="password">
+        <el-input type="password" v-model="loginForm.password"
+                  auto-complete="off" placeholder="密码"></el-input>
+      </el-form-item>
+      <el-form-item prop="checkPass">
+       <el-input type="password" v-model="loginForm.checkPass" autocomplete="off" placeholder="确认密码"></el-input>
+      </el-form-item>
+    </el-form>
+    <el-form-item>
+      <el-input type="text" v-model="loginForm.name"
+                auto-complete="off" placeholder="真实姓名"></el-input>
+    </el-form-item>
+    <el-form-item prop="phone">
+      <el-input type="text" v-model="loginForm.phone"
+                auto-complete="off" placeholder="电话号码"></el-input>
+    </el-form-item>
+    <el-form-item prop="email">
+      <el-input type="text" v-model="loginForm.email"
+                auto-complete="off" placeholder="E-Mail"></el-input>
+    </el-form-item>
+    <el-form-item style="width: 100%">
+      <el-button type="primary" style="width: 40%;border: none" v-on:click="register">注册</el-button>
+    </el-form-item>
+  </el-form>
+  </transition>
+  </body>
+</template>
+<script>
+  export default{
+    data () {
+      var validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'))
+        } else {
+          if (this.loginForm.checkPass !== '') {
+            this.$refs.loginForm.validateField('checkPass')
+          }
+          callback()
+        }
+      }
+      var validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'))
+        } else if (value !== this.loginForm.password) {
+          callback(new Error('两次输入密码不一致!'))
+        } else {
+          callback()
+        }
+      }
+      var checkEmail = (rule, value, callback) => {
+        // 验证邮箱的正则表达式
+        const regEmail = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
+        if (regEmail.test(value)) {
+          callback()
+        } else {
+          callback(new Error('请输入合法的邮箱'))
+        }
+      }
+      // 验证手机号的校验规则
+      var checkMobile = (rule, value, callback) => {
+          // 验证手机号的正则表达式
+          const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+        if (regMobile.test(value)) {
+          callback()
+        } else callback(new Error('请输入合法的手机号'))
+      }
+      return {
+        rules: {
+          username: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
+          password: [{required: true, message: '密码不能为空', validator: validatePass, trigger: 'blur'}],
+          checkPass: [{validator: validatePass2, trigger: 'blur'}],
+          email: [
+            {message: '请输入邮箱', trigger: 'blur'},
+            {validator: checkEmail, trigger: 'blur'}
+          ],
+          phone: [
+            {message: '请输入手机号', trigger: 'blur'},
+            {validator: checkMobile, trigger: 'blur'}
+          ]
+        },
+        checked: true,
+        loginForm: {
+          username: '',
+          password: '',
+          checkPass: '',
+          name: '',
+          phone: '',
+          email: ''
+        },
+        loading: false,
+        show1: true
+      }
+    },
+    methods: {
+      register () {
+        var _this = this
+        this.$axios
+          .post('/register', {
+            username: this.loginForm.username,
+            password: this.loginForm.password,
+            name: this.loginForm.name,
+            phone: this.loginForm.phone,
+            email: this.loginForm.email
+          })
+          .then(resp => {
+            if (resp.data.code === 200) {
+              this.show1 = !this.show1
+              this.$alert('注册成功', '提示', {
+                confirmButtonText: '确定'
+              })
+              _this.$router.replace('/login')
+            } else {
+              this.$alert(resp.data.message, '提示', {
+                confirmButtonText: '确定'
+              })
+            }
+          })
+          .catch(failResponse => {})
+      }
+    }
+  }
+</script>
+<style>
+  #paper {
+    background:url("../assets/img/bg/4.jpeg") no-repeat;
+    background-position: center;
+    height: 100%;
+    width: 100%;
+    background-size: cover;
+    position: fixed;
+  }
+  body{
+    margin: -5px 0px;
+  }
+  .register-container {
+    border-radius: 15px;
+    background-clip: padding-box;
+    margin: 90px auto;
+    width: 350px;
+    padding: 35px 35px 15px 35px;
+    border: 1px solid #eaeaea;
+    box-shadow: 0 0 25px #cac6c6;
+    transition: width 2s;
+    background-color: transparent;
+  }
+  .register_title {
+    margin: 0px auto 40px auto;
+    text-align: center;
+    color: #ffffff;
+  }
+</style>
