@@ -19,6 +19,7 @@
     <el-breadcrumb-item :to="{ path: '/library'}">图书馆</el-breadcrumb-item>
     <el-breadcrumb-item :to="{ path: '/admin/dashboard'}" replace>管理中心</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: '/commentBoard'}">留言板</el-breadcrumb-item>
+      <el-breadcrumb-item :to="{ path: '/seat'}">阅览室</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: ''}"></el-breadcrumb-item>
   </el-breadcrumb>
     <!--<i class="el-icon-switch-button" v-on:click="logout" style="font-size: 40px;float: right"></i>-->

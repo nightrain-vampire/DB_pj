@@ -7,6 +7,7 @@
         <el-breadcrumb-item :to="{ path: '/library'}">图书馆</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/admin/dashboard'}">管理中心</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: '/commentBoard'}">留言板</el-breadcrumb-item>
+        <el-breadcrumb-item :to="{ path: '/seat'}">阅览室</el-breadcrumb-item>
         <el-breadcrumb-item :to="{ path: ''}"></el-breadcrumb-item>
       </el-breadcrumb>
     </el-row>

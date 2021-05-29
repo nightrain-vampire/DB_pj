@@ -54,7 +54,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/api/admin/userEdit")
+    @PutMapping("/api/admin/user")
     public Result editUser(@RequestBody User requestUser) {
         if(userService.editUser(requestUser)) {
             return ResultFactory.buildSuccessResult("修改用户信息成功");

@@ -42,12 +42,12 @@ insert  into `admin_menu`(`id`,`path`,`name`,`name_zh`,`icon_cls`,`component`,`p
 (6,'/admin/user/profiles','Profiles','用户信息',NULL,'user/UserProfile',3),
 (7,'/admin/user/role','Role','角色配置',NULL,'user/Role',3),
 (8,'/admin/content/book','BookManagement','图书管理',NULL,'content/BookManagement',4),
-(9,'/admin/content/banner','BannerManagement','广告管理',NULL,'content/BannerManagement',4),
+(9,'/admin/content/banner','BannerManagement','座位管理',NULL,'content/BannerManagement',4),
 (10,'/admin/content/article','ArticleManagement','公告管理',NULL,'content/ArticleManagement',4),
 (17,'/admin/user/book','bookReturn','归还图书','el-icon-tickets','user/BorrowedBooks',1),
 (18,'/admin/record','Record','借阅记录',NULL,'user/OrderRecord',3),
 (19,'/admin/return','Return','归还记录',NULL,'user/ReturnRecord',3),
-(20,'/admin/user/commentator','CommentEditor','留言服务',NULL,'user/CommentEditor',1),
+(20,'/admin/user/commentedtior','CommentEditor','留言服务',NULL,'user/CommentEditor',1),
 (21,'/admin/user/SingleReturnRecord','SingleReturnRecord','个人借阅情况',NULL,'user/SingleReturnRecord',1),
 (22,'/admin/content/CommentManagement','CommentManagement','留言管理',NULL,'content/CommentManagement',4),
 (23,'/admin/user/singleComment','SingleComment','个人留言',NULL,'user/SingleComment',1),
@@ -375,6 +375,120 @@ CREATE TABLE `comment` (
     PRIMARY KEY (`id`),
     CONSTRAINT `fk_comment_on_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+/* Table structure for table `seat` */
+DROP TABLE IF EXISTS `seat`;
+
+CREATE TABLE `seat` (
+                        `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '纪录编号',
+                        `sid` int(11) NOT NULL COMMENT '座位编号',
+                        `state` int(11) DEFAULT 1 COMMENT '座位状态',
+                        PRIMARY KEY (`id`),
+                        KEY `fk_seat_on_state` (`state`),
+                        CONSTRAINT `fk_seat_on_state` FOREIGN KEY (`state`) REFERENCES `seat_stat`(`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+insert into `seat` (`id`, `sid`, `state`) VALUES
+(1,1,1),
+(2,2,2),
+(3,3,3),
+(4,4,1),
+(5,5,2),
+(6,6,1),
+(7,7,2),
+(8,8,3),
+(9,9,1),
+(10,10,2),
+(11,11,1),
+(12,12,2),
+(13,13,3),
+(14,14,1),
+(15,15,2),
+(16,16,1),
+(17,17,2),
+(18,18,3),
+(19,19,1),
+(20,20,2),
+(21,21,1),
+(22,22,2),
+(23,23,3),
+(24,24,1),
+(25,25,2);
+
+/* Table structure for table `seat_stat` */
+DROP TABLE IF EXISTS `seat_stat`;
+
+CREATE TABLE `seat_stat` (
+                             `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '状态编号',
+                             `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '名称',
+                             `name_zh` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '中文名称',
+                             PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+
+insert into `seat_stat` (`id`, `name`, `name_zh`) VALUES
+(1,'available','空闲'),
+(2,'occupied' ,'已占'),
+(3,'broken', '维修中');
+
+
+/* Table structure for table `seat_order` */
+/*
+DROP TABLE IF EXISTS `seat_order`;
+
+CREATE TABLE `seat_order` (
+                              `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+                              `uid` int(11) DEFAULT NULL COMMENT '用户编号',
+                              `sid` int(11) DEFAULT NULL COMMENT '座位编号',
+                              `time` datetime DEFAULT NULL COMMENT '开始日期',
+                              `time2` datetime DEFAULT NULL COMMENT '预期结束时间',
+                              PRIMARY KEY (`id`),
+                              CONSTRAINT `fk_seat_order_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;*/
+
+/* Table structure for table `seat_return` */
+/*
+DROP TABLE IF EXISTS `seat_return`;
+
+CREATE TABLE `seat_return` (
+                               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+                               `uid` int(11) DEFAULT NULL COMMENT '用户编号',
+                               `sid` int(11) DEFAULT NULL COMMENT '座位编号',
+                               `time` datetime DEFAULT NULL COMMENT '结束日期',
+                               `time2` datetime DEFAULT NULL COMMENT '预期结束时间',
+                               PRIMARY KEY (`id`),
+                               CONSTRAINT `fk_seat_return_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;*/
+
+/* The view */
+CREATE OR REPLACE VIEW seat_view AS
+SELECT seat.id,seat.sid,seat_stat.name,seat_stat.name_zh
+from seat,seat_stat WHERE seat.state=seat_stat.id;
+
+/* Trigger */
+CREATE TRIGGER order_trigger after delete on `user` FOR EACH ROW
+begin
+    DELETE FROM `ordered` WHERE OLD.id=ordered.uid;
+end;
+
+/* Procedure */
+CREATE PROCEDURE free_num(OUT s integer)
+BEGIN
+    SELECT COUNT(*) INTO s FROM seat WHERE seat.state = 1;
+end;
+
+/* Function */
+set global log_bin_trust_function_creators=1;
+
+CREATE FUNCTION order_num(bid integer)
+    returns integer
+begin
+    declare num integer default 0;
+    SELECT COUNT(*) INTO num
+    FROM ordered
+    WHERE ordered.bid=bid;
+    return num;
+end;
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;

@@ -32,7 +32,8 @@
           {name: '/jotter', navItem: '公告栏'},
           {name: '/library', navItem: '图书馆'},
           {name: '/login', navItem: '管理中心'},
-          {name: '/commentBoard', navItem: '留言板'}
+          {name: '/commentBoard', navItem: '留言板'},
+          {name: '/seat',navItem: '阅览室'}
         ],
         keywords: '',
         path: ''

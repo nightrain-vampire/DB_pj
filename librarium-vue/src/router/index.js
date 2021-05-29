@@ -14,6 +14,7 @@ import ArticleDetails from '../components/jotter/ArticleDetails'
 import Error404 from '../components/pages/Error404'
 import Comment from '../components/commentBoard/Comment'
 import CommentDetails from '../components/commentBoard/CommentDetails'
+import RoomIndex from '../components/seat/RoomIndex'
 
 Vue.use(Router)
 
@@ -70,6 +71,11 @@ export default new Router({
           path: '/commentBoard',
           name: 'CommentBoard',
           component: Comment,
+        },
+        {
+          path: '/seat',
+          name: 'ReadingRoom',
+          component: RoomIndex
         }
       ]
     },
@@ -172,6 +178,11 @@ export const createRouter = routes => new Router({
           path: '/commentBoard',
           name: 'CommentBoard',
           component: Comment
+        },
+        {
+          path: '/seat',
+          name: 'ReadingRoom',
+          component: RoomIndex
         }
       ]
     },

@@ -232,7 +232,7 @@
   .card{
     width: 200px;
     margin-bottom: 20px;
-    height: 400px;
+    height: 350px;
     float: left;
     margin-right: 15px;
     border: 1px solid #eaeaea;

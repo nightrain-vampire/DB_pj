@@ -72,10 +72,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <div style="margin: 20px 0 20px 0;float: left">
-        <el-button class="el-icon-close" type="warning" >取消选择</el-button>
-        <el-button class="el-icon-delete" type="danger" >批量删除</el-button>
-      </div>
     </el-card>
   </div>
 </template>
