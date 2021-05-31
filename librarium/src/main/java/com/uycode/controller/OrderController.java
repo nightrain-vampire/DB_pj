@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -65,7 +66,7 @@ public class OrderController {
             minute = '0' + minute;
         if(seconds < 10)
             seconds = '0' + seconds;
-        String returnedTimeString = year + "年" + month + "月" + day + "  " + hour + ":" + minute + ":" + seconds;
+        String returnedTimeString = year + "年" + month + "月" + day + "日" + "  " + hour + ":" + minute + ":" + seconds;
         returned.setTime(returnedTimeString);
         returnedDAO.save(returned);
         orderedDAO.deleteById(ordered.getId());
