@@ -343,24 +343,24 @@ insert  into `returned`(`id`,`uid`,`bid`,`duetime`,`time`) values
 DROP TABLE IF EXISTS `user`;
 
 CREATE TABLE `user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `password` varchar(255) DEFAULT NULL,
-  `salt` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL,
-  `name` varchar(255) DEFAULT NULL,
-  `phone` varchar(255) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `enabled` tinyint(1) DEFAULT NULL,
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
+  `username` char(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '用户名',
+  `password` varchar(255) DEFAULT NULL COMMENT '密码',
+  `salt` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '加盐值',
+  `name` varchar(255) DEFAULT NULL COMMENT '真实姓名',
+  `phone` varchar(255) DEFAULT NULL COMMENT '手机号码',
+  `email` varchar(255) DEFAULT NULL COMMENT '邮箱',
+  `enabled` tinyint(1) DEFAULT NULL COMMENT '状态',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=29 DEFAULT CHARSET=utf8;
 
 /*Data for the table `user` */
 
 insert  into `user`(`id`,`username`,`password`,`salt`,`name`,`phone`,`email`,`enabled`) values
-(1,'admin','36c0d3ecb357040aff69e0db25c41fb0','/MPdPrsMc7PV7hYATAbILw==','系统管理员','15616258066','uysoft@hnu.edu.cn',1),
-(2,'test','ee67f703c63c09207a2aa82feb86e723','laluHHt9MauEDVEI2cSzUQ==','测试用户','15616258066','Hyper-Hack@outlook.com',1),
+(1,'admin','36c0d3ecb357040aff69e0db25c41fb0','/MPdPrsMc7PV7hYATAbILw==','系统管理员','15616258555','springdb@fudan.edu.cn',1),
+(2,'test','ee67f703c63c09207a2aa82feb86e723','laluHHt9MauEDVEI2cSzUQ==','测试用户','15376258066','123456789@qq.com',1),
 (3,'editor','8583a2d965d6159edbf65c82d871fa3e','MZTe7Qwf9QgXBXrZzTIqJQ==','编辑',NULL,NULL,1),
-(25,'visitor','f2aa782914b93d35fd2dd19bdf3a7778','YtRri1YvnlVcLxYQtml7NQ==','ahmatjan','456789','xdcfgvbhjn',1);
+(25,'visitor','f2aa782914b93d35fd2dd19bdf3a7778','YtRri1YvnlVcLxYQtml7NQ==','ahmatjan',NULL,NULL,1);
 /*Table structure for table `comment` */
 DROP TABLE IF EXISTS `comment`;
 
@@ -380,7 +380,7 @@ CREATE TABLE `comment` (
 DROP TABLE IF EXISTS `seat`;
 
 CREATE TABLE `seat` (
-                        `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '纪录编号',
+                        `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '记录编号',
                         `sid` int(11) NOT NULL COMMENT '座位编号',
                         `state` int(11) DEFAULT 1 COMMENT '座位状态',
                         PRIMARY KEY (`id`),
@@ -429,33 +429,6 @@ insert into `seat_stat` (`id`, `name`, `name_zh`) VALUES
 (1,'available','空闲'),
 (2,'occupied' ,'已占'),
 (3,'broken', '维修中');
-
-
-/* Table structure for table `seat_order` */
-/*
-DROP TABLE IF EXISTS `seat_order`;
-CREATE TABLE `seat_order` (
-                              `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-                              `uid` int(11) DEFAULT NULL COMMENT '用户编号',
-                              `sid` int(11) DEFAULT NULL COMMENT '座位编号',
-                              `time` datetime DEFAULT NULL COMMENT '开始日期',
-                              `time2` datetime DEFAULT NULL COMMENT '预期结束时间',
-                              PRIMARY KEY (`id`),
-                              CONSTRAINT `fk_seat_order_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;*/
-
-/* Table structure for table `seat_return` */
-/*
-DROP TABLE IF EXISTS `seat_return`;
-CREATE TABLE `seat_return` (
-                               `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '编号',
-                               `uid` int(11) DEFAULT NULL COMMENT '用户编号',
-                               `sid` int(11) DEFAULT NULL COMMENT '座位编号',
-                               `time` datetime DEFAULT NULL COMMENT '结束日期',
-                               `time2` datetime DEFAULT NULL COMMENT '预期结束时间',
-                               PRIMARY KEY (`id`),
-                               CONSTRAINT `fk_seat_return_uid` FOREIGN KEY (`uid`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=111 DEFAULT CHARSET=utf8;*/
 
 /* The view */
 CREATE OR REPLACE VIEW seat_view AS
