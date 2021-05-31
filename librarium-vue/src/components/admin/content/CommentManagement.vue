@@ -9,7 +9,7 @@
     </el-row>
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
-        :data="comments"
+        :data="comments.filter(data => !search || data.commentTitle.toLowerCase().includes(search.toLowerCase()) || data.username.toLowerCase().includes(search.toLowerCase()))"
         stripe
         style="width: 100%"
         :max-height="tableHeight">
@@ -20,17 +20,25 @@
         <el-table-column
           prop="commentTitle"
           label="题目"
-          width="200">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="username"
           label="留言者昵称"
-          width="200">
+          width="100">
         </el-table-column>
         <el-table-column
           prop="commentDate"
           label="发布日期"
-          width="200">
+          width="150">
+        </el-table-column>
+        <el-table-column>
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="输入标题/昵称搜索"/>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"
@@ -73,7 +81,8 @@ export default {
     return {
       comments: [],
       pageSize: 10,
-      total: 0
+      total: 0,
+      search:''
     }
   },
   mounted () {
