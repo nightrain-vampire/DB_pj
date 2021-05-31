@@ -19,30 +19,30 @@
         <el-table-column
           prop="commentTitle"
           label="标题"
-          width="200">
+          width="150">
         </el-table-column>
         <el-table-column
           prop="username"
           label="留言者昵称"
-          width="200">
+          width="100">
         </el-table-column>
         <el-table-column
           prop="commentDate"
           label="发布日期"
-          width="200">
+          width="150">
+        </el-table-column>
+        <el-table-column>
+          <template slot="header" slot-scope="scope">
+            <el-input
+              v-model="search"
+              size="mini"
+              placeholder="输入标题搜索"/>
+          </template>
         </el-table-column>
         <el-table-column
           fixed="right"
           label="操作"
-          fit>
-          <el-table-column>
-            <template slot="header" slot-scope="scope">
-              <el-input
-                v-model="search"
-                size="mini"
-                placeholder="输入标题搜索"/>
-            </template>
-          </el-table-column>
+          width="200">
           <template slot-scope="scope">
             <el-button
               @click.native.prevent="viewcomment(scope.row.id)"
@@ -57,7 +57,7 @@
               移除
             </el-button>
           </template>
-        </el-table-column>
+          </el-table-column>
       </el-table>
       <el-row>
         <el-pagination
