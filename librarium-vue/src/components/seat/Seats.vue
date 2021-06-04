@@ -47,11 +47,11 @@ export default {
     }
   },
   mounted: function () {
-    this.warnings()
+    //this.warnings()
     this.loadSeats()
   },
   methods: {
-    warnings () {
+    /*warnings () {
       var sUserAgent = navigator.userAgent.toLowerCase();
       var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
       var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
@@ -64,7 +64,7 @@ export default {
       if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
         this.$message.warning("移动端体验不好，请用电脑浏览器打开1~")
       }
-    },
+    },*/
     loadSeats () {
       var _this = this
       this.$axios.get('/seats').then(resp => {

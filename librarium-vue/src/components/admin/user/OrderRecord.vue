@@ -10,7 +10,7 @@
     <!--<bulk-registration @onSubmit="listUsers()"></bulk-registration>-->
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
-        :data="borrowed.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+        :data="borrowed.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.title.toLowerCase().includes(search.toLowerCase()))"
         stripe
         :default-sort = "{prop: 'id', order: 'ascending'}"
         style="width: 100%"
@@ -54,7 +54,7 @@
             <el-input
               v-model="search"
               size="mini"
-              placeholder="输入用户名搜索"/>
+              placeholder="输入用户名/书名搜索"/>
           </template>
           <template slot-scope="scope">
             <el-button
@@ -67,10 +67,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <div style="margin: 20px 0 20px 0;float: left">
-        <el-button type="warning"  class="el-icon-close">取消选择</el-button>
-        <el-button type="danger"  class="el-icon-delete">批量删除</el-button>
-      </div>
     </el-card>
   </div>
 </template>
@@ -99,7 +95,7 @@ export default {
   },
   methods: {
     returnByAdmin (row) {
-      this.$confirm(`此操作将强制归还${row.title}，是否继续?`, '提示', {
+      this.$confirm(`此操作将强制归还《${row.title}》，是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -111,7 +107,7 @@ export default {
             this.listAllBorrowed()
             this.$notify.success({
               title: '强制归还成功',
-              message: `你已经移除了${rowName}借阅的${rowTitle}`
+              message: `你已经移除了${rowName}借阅的《${rowTitle}》`
             })
           }
         }).catch(error=> {

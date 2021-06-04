@@ -1,7 +1,8 @@
 <template>
   <body id="paper">
   <transition name="el-zoom-in-center">
-  <el-form :model="loginForm"
+  <el-form ref="loginFormRef"
+          :model="loginForm"
            :rules="rules"
            class="register-container transition-box"
            v-show="show1"
@@ -13,7 +14,7 @@
       <el-input type="text" v-model="loginForm.username"
                 auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
-    <el-form :model="loginForm" status-icon :rules="rules" ref="ruleForm" class="demo-ruleForm">
+    <el-form ref="loginFormRef" :model="loginForm" status-icon :rules="rules">
       <el-form-item prop="password">
         <el-input type="password" v-model="loginForm.password"
                   auto-complete="off" placeholder="密码"></el-input>
@@ -49,7 +50,7 @@
           callback(new Error('请输入密码'))
         } else {
           if (this.loginForm.checkPass !== '') {
-            this.$refs.loginForm.validateField('checkPass')
+            this.$refs.loginFormRef.validateField('checkPass')
           }
           callback()
         }
@@ -75,7 +76,7 @@
       // 验证手机号的校验规则
       var checkMobile = (rule, value, callback) => {
           // 验证手机号的正则表达式
-          const regMobile = /^(0|86|17951)?(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$/
+          const regMobile = /^1[0-9]{10}$/
         if (regMobile.test(value)) {
           callback()
         } else callback(new Error('请输入合法的手机号'))
@@ -84,7 +85,7 @@
         rules: {
           username: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
           password: [{required: true, message: '密码不能为空', validator: validatePass, trigger: 'blur'}],
-          checkPass: [{validator: validatePass2, trigger: 'blur'}],
+          checkPass: [{required:true, validator: validatePass2, trigger: 'blur'}],
           email: [
             {message: '请输入邮箱', trigger: 'blur'},
             {validator: checkEmail, trigger: 'blur'}
@@ -94,7 +95,7 @@
             {validator: checkMobile, trigger: 'blur'}
           ]
         },
-        checked: true,
+        //checked: true,
         loginForm: {
           username: '',
           password: '',
@@ -110,29 +111,33 @@
     methods: {
       register () {
         var _this = this
-        this.$axios
-          .post('/register', {
-            username: this.loginForm.username,
-            password: this.loginForm.password,
-            name: this.loginForm.name,
-            phone: this.loginForm.phone,
-            email: this.loginForm.email
-          })
-          .then(resp => {
-            if (resp.data.code === 200) {
-              this.show1 = !this.show1
-              this.$alert('注册成功', '提示', {
-                confirmButtonText: '确定'
-              })
-              _this.$router.replace('/login')
-            } else {
-              this.$alert(resp.data.message, '提示', {
-                confirmButtonText: '确定'
-              })
-            }
-          })
-          .catch(failResponse => {})
-      }
+        this.$refs.loginFormRef.validate(async valid=>{
+          if(!valid)
+            return;
+          this.$axios
+            .post('/register', {
+              username: this.loginForm.username,
+              password: this.loginForm.password,
+              name: this.loginForm.name,
+              phone: this.loginForm.phone,
+              email: this.loginForm.email
+            })
+            .then(resp => {
+              if (resp.data.code === 200) {
+                this.show1 = !this.show1
+                this.$alert('注册成功', '提示', {
+                  confirmButtonText: '确定'
+                })
+                _this.$router.replace('/login')
+              } else {
+                this.$alert(resp.data.message, '提示', {
+                  confirmButtonText: '确定'
+                })
+              }
+            })
+            .catch(failResponse => {})
+        })
+        }
     }
   }
 </script>

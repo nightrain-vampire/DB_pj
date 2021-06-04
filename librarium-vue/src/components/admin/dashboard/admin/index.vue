@@ -62,7 +62,7 @@ export default {
 .box-card {
   margin-top: 5px;
   width: 988px;
-  height: 1200px;
+  height: 1500px;
   text-align: left;
 }
 </style>

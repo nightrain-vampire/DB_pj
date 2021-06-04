@@ -3,7 +3,7 @@
     <el-dialog
       title="修改用户信息"
       :visible.sync="dialogFormVisible">
-      <el-form v-model="selectedUser" style="text-align: left" ref="dataForm">
+      <el-form ref="loginFormRef" :model="selectedUser" :rules="rules" style="text-align: left">
         <el-form-item label="用户名" label-width="120px" prop="username">
           <label>{{selectedUser.username}}</label>
         </el-form-item>
@@ -121,10 +121,6 @@
           </template>
         </el-table-column>
       </el-table>
-      <div style="margin: 20px 0 20px 0;float: left">
-        <el-button type="warning"  class="el-icon-close">取消选择</el-button>
-        <el-button type="danger"  class="el-icon-delete">批量删除</el-button>
-      </div>
     </el-card>
   </div>
 </template>
@@ -136,13 +132,40 @@
       name: 'UserProfile',
       components: {BulkRegistration},
       data () {
+        var checkEmail = (rule, value, callback) => {
+          // 验证邮箱的正则表达式
+          const regEmail = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
+          if (regEmail.test(value)) {
+            callback()
+          } else {
+            callback(new Error('请输入合法的邮箱'))
+          }
+        }
+        // 验证手机号的校验规则
+        var checkMobile = (rule, value, callback) => {
+          // 验证手机号的正则表达式
+          const regMobile = /^1[0-9]{10}$/
+          if (regMobile.test(value)) {
+            callback()
+          } else callback(new Error('请输入合法的手机号'))
+        }
           return {
             users: [],
             roles: [],
             dialogFormVisible: false,
             selectedUser: [],
             selectedRolesIds: [],
-            search:''
+            search:'',
+            rules:{
+              email: [
+                //{message: '请输入邮箱', trigger: 'blur'},
+                {validator: checkEmail, trigger: 'blur'}
+              ],
+              phone: [
+                //{message: '请输入手机号', trigger: 'blur'},
+                {validator: checkMobile, trigger: 'blur'}
+              ]
+            }
           }
       },
       mounted () {
@@ -229,19 +252,23 @@
               }
             }
           }
-          this.$axios.put('/admin/user', {
-            username: user.username,
-            name: user.name,
-            phone: user.phone,
-            email: user.email,
-            roles: roles
-          }).then(resp => {
-            if (resp && resp.data.code === 200) {
-              this.$alert('用户信息修改成功')
-              this.dialogFormVisible = false
-              // 修改角色后重新请求用户信息，实现视图更新
-              this.listUsers()
-            }
+          this.$refs.loginFormRef.validate(async valid=>{
+            if(!valid)
+              return;
+            this.$axios.put('/admin/user', {
+              username: user.username,
+              name: user.name,
+              phone: user.phone,
+              email: user.email,
+              roles: roles
+            }).then(resp => {
+              if (resp && resp.data.code === 200) {
+                this.$alert('用户信息修改成功')
+                this.dialogFormVisible = false
+                // 修改角色后重新请求用户信息，实现视图更新
+                this.listUsers()
+              }
+            })
           })
         },
         editUser (user) {

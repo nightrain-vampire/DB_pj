@@ -3,7 +3,7 @@
     <el-dialog
       title="修改个人信息"
       :visible.sync="dialogFormVisible">
-      <el-form v-model="selectedUser" style="text-align: left" ref="dataForm">
+      <el-form ref="loginFormRef" :model="selectedUser" :rules="rules" style="text-align: left">
         <el-form-item label="用户名" label-width="120px" prop="username">
           <label>{{selectedUser.username}}</label>
         </el-form-item>
@@ -86,10 +86,37 @@
   export default {
     name: 'UserProfile',
     data () {
+      var checkEmail = (rule, value, callback) => {
+        // 验证邮箱的正则表达式
+        const regEmail = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/
+        if (regEmail.test(value)) {
+          callback()
+        } else {
+          callback(new Error('请输入合法的邮箱'))
+        }
+      }
+      // 验证手机号的校验规则
+      var checkMobile = (rule, value, callback) => {
+        // 验证手机号的正则表达式
+        const regMobile = /^1[0-9]{10}$/
+        if (regMobile.test(value)) {
+          callback()
+        } else callback(new Error('请输入合法的手机号'))
+      }
       return {
         users: [],
         dialogFormVisible: false,
-        selectedUser: []
+        selectedUser: [],
+        rules:{
+          email: [
+            //{message: '请输入邮箱', trigger: 'blur'},
+            {validator: checkEmail, trigger: 'blur'}
+          ],
+          phone: [
+            //{message: '请输入手机号', trigger: 'blur'},
+            {validator: checkMobile, trigger: 'blur'}
+          ]
+        }
       }
     },
     mounted () {
@@ -130,20 +157,24 @@
         }
       },
       onSubmit (user) {
-        this.$axios.put('/userEdit', {
-          username: user.username,
-          name: user.name,
-          phone: user.phone,
-          email: user.email,
-          password: user.password
-          /*roles: roles*/
-        }).then(resp => {
-          if (resp && resp.data.code === 200){
-            this.$alert('用户信息修改成功')
-            this.dialogFormVisible = false
-            // 修改角色后重新请求用户信息，实现视图更新
-            this.listUser()
-          }
+        this.$refs.loginFormRef.validate(async valid=>{
+          if(!valid)
+            return;
+          this.$axios.put('/userEdit', {
+            username: user.username,
+            name: user.name,
+            phone: user.phone,
+            email: user.email,
+            password: user.password
+            /*roles: roles*/
+          }).then(resp => {
+            if (resp && resp.data.code === 200){
+              this.$alert('用户信息修改成功')
+              this.dialogFormVisible = false
+              // 修改角色后重新请求用户信息，实现视图更新
+              this.listUser()
+            }
+          })
         })
       },
       editUser (user) {

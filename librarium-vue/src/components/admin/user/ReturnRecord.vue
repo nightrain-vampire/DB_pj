@@ -9,7 +9,7 @@
     </el-row>
     <el-card style="margin: 18px 2%;width: 95%">
       <el-table
-        :data="returned.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+        :data="returned.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()) || data.title.toLowerCase().includes(search.toLowerCase()))"
         stripe
         ref="multipleTable"
         :default-sort = "{prop: 'id', order: 'ascending'}"
@@ -49,7 +49,7 @@
             <el-input
               v-model="search"
               size="mini"
-              placeholder="输入用户名搜索"/>
+              placeholder="输入用户名/书名搜索"/>
           </template>
         </el-table-column>
       </el-table>

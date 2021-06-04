@@ -88,11 +88,11 @@
       }
     },
     mounted: function () {
-      this.warnings()
+      //this.warnings()
       this.loadBooks()
     },
     methods: {
-      warnings () {
+      /*warnings () {
         var sUserAgent = navigator.userAgent.toLowerCase();
         var bIsIpad = sUserAgent.match(/ipad/i) == "ipad";
         var bIsIphoneOs = sUserAgent.match(/iphone os/i) == "iphone os";
@@ -105,7 +105,7 @@
         if (bIsIpad || bIsIphoneOs || bIsMidp || bIsUc7 || bIsUc || bIsAndroid || bIsCE || bIsWM) {
           this.$message.warning("移动端体验不好，请用电脑浏览器打开1~")
         }
-      },
+      },*/
       borrow (item) {
         if (this.$store.state.id === '') {
           console.log("未登录，不能借阅！");
@@ -117,9 +117,15 @@
           const year = borrowTime.getFullYear();
           const month = borrowTime.getMonth() + 1;
           const day = borrowTime.getDate();
-          const hour = borrowTime.getHours();
-          const minute = borrowTime.getMinutes();
-          const seconds = borrowTime.getSeconds();
+          let hour = borrowTime.getHours();
+          let minute = borrowTime.getMinutes();
+          let seconds = borrowTime.getSeconds();
+          if(hour < 10)
+            hour = '0' + hour;
+          if(minute < 10)
+            minute = '0' + minute;
+          if(seconds < 10)
+            seconds = '0' + seconds;
           this.borrowed.time = `${year}年${month}月${day}日  ${hour}:${minute}:${seconds}`;
           let dday = day;
           if (month - 9 === 2 && dday > 28) {
@@ -127,10 +133,7 @@
               dday = 29;
             else
               dday = 28;
-          } else if (dday === 30 && ((month + 3) % 12 === 1 || (month + 3) % 12 === 3 || (month + 3) % 12 === 5 ||
-            (month + 3) % 12 === 7 || (month + 3) % 12 === 8 || (month + 3) % 12 === 10 || (month + 3) % 12 === 12))
-            dday = 31;
-          else if (dday === 31 && ((month + 3) % 12 === 4 || (month + 3) % 12 === 6 || (month + 3) % 12 === 9 ||
+          } else if (dday === 31 && ((month + 3) % 12 === 4 || (month + 3) % 12 === 6 || (month + 3) % 12 === 9 ||
             (month + 3) % 12 === 11))
             dday = 30;
           this.borrowed.duetime = `${month+3>12?year+1:year}年${month+3>12?month-9:month+3}月${dday}日  ${hour}:${minute}:${seconds}`;

@@ -1,8 +1,4 @@
 /**
- * Copied by ahmatjan 2020/4/1
- */
-
-/**
  * Parse the time to string
  * @param {(Object|string|number)} time
  * @param {string} cFormat

@@ -17,8 +17,8 @@
         <el-input type="password" v-model="loginForm.password"
                   auto-complete="off" placeholder="密码"></el-input>
       </el-form-item>
-      <el-checkbox class="login_remember" v-model="checked"
-                   label-position="left"><span style="color: #505458">记住密码</span></el-checkbox>
+      <!--<el-checkbox class="login_remember" v-model="checked"
+                   label-position="left"><span style="color: #505458">记住密码</span></el-checkbox>-->
       <el-form-item style="width: 100%">
         <el-button type="primary" style="width: 40%;border: none" v-on:click="login">登录</el-button>
         <router-link to="register">
@@ -38,7 +38,7 @@
           username: [{required: true, message: '用户名不能为空', trigger: 'blur'}],
           password: [{required: true, message: '密码不能为空', trigger: 'blur'}]
         },
-        checked: true,
+        //checked: true,
         loginForm: {
           username: '',
           password: ''
